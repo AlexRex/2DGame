@@ -76,10 +76,22 @@ namespace _2DGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             
-            Animation playerAnimation = new Animation();
+
+            //Load all the textures for all the characters
+
+            Texture2D ballFireTexture;
+            Texture2D squareTexture;
+
+            ballFireTexture = Content.Load<Texture2D>("Sprites/ballfire");
+            squareTexture = Content.Load<Texture2D>("Sprites/player2");
+
+            List<Texture2D> charactersTexture = new List<Texture2D>();
+
+            charactersTexture.Add(ballFireTexture);
+            charactersTexture.Add(squareTexture);
 
             //Temporal
-            Texture2D playerTexture;
+            /*Texture2D playerTexture;
 
             int selection = 0;
 
@@ -96,19 +108,20 @@ namespace _2DGame
                 default:
                     playerTexture = Content.Load<Texture2D>("Sprites/player");
                     break;
-            }
+            }*/
 
 
             //Texture2D playerTexture = Content.Load<Texture2D>("Sprites/ballfire");
 
 
-            playerAnimation.Initialize(playerTexture, Vector2.Zero, 64, 64, 1, 100, Color.White, 1f, true);
+            //  playerAnimation.Initialize(playerTexture, Vector2.Zero, 64, 64, 1, 100, Color.White, 1f, true);
 
-            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X+playerAnimation.FrameWidth/2,
+            /*Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X+playerAnimation.FrameWidth/2,
                 GraphicsDevice.Viewport.TitleSafeArea.Y + playerAnimation.FrameHeight/2 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
 
+            */
 
-            player.Initialize(playerAnimation, playerPosition);
+            player.Initialize(charactersTexture, GraphicsDevice);
 
 
             barrierTexture = Content.Load<Texture2D>("Sprites/barrier");

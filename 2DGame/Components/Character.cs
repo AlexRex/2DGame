@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace _2DGame.Components
 {
-    class Character : Player
+    class Character 
     {
         public int Strength { get; set; }
 
@@ -18,38 +18,59 @@ namespace _2DGame.Components
         public int Health { get; set; }
 
 
+        private Animation animation;
 
-        public Character(int type)
+        public int Width { get { return Animation.FrameWidth; }  }
+        public int Height { get { return Animation.FrameHeight; } }
+
+        public Vector2 Position { get { return Animation.Position; } }
+
+        public Animation Animation
         {
-            switch (type) {
+            get { return animation; }
+        }
+
+        public void Initialize(List<Texture2D> charactersTexture, int type, GraphicsDevice graphicsDevice)
+        {
+
+            animation = new Animation();
+
+
+            switch (type)
+            {
                 case 1:
                     Strength = 100;
                     Ammunition = 100;
-                    Speed = 1.0f;
+                    Speed = 10.0f;
+                    animation.Initialize(charactersTexture.ElementAt(type), Vector2.Zero, 64, 64, 1, 100, Color.White, 1f, true);
                     break;
 
                 default:
                     Strength = 100;
                     Ammunition = 100;
                     Speed = 1.0f;
-                break;
+                    break;
 
             }
 
             Health = 100;
-            
-        }
-
-        public void Initialize(Texture2D texture)
-        {
-
         }
 
         public void Update(GameTime gameTime)
         {
-            
+            Animation.Update(gameTime);
         }
 
+        public void UpdatePosition(Vector2 position)
+        {
+            if(position!=null)
+                animation.Position = position;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            Animation.Draw(spriteBatch);
+        }
        
 
     }

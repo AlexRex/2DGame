@@ -12,9 +12,8 @@ namespace _2DGame.Components
     {
         private String id;
         private String password;
-        public bool isLogged;
+        private bool isLogged;
 
-        public Animation PlayerAnimation;
 
         public Vector2 Position;
         private Vector2 previousPosition; // Go to this position when collides to one barrier
@@ -24,8 +23,6 @@ namespace _2DGame.Components
         float playerMoveSpeed;
 
 
-        public int Width { get { return PlayerAnimation.FrameWidth; }  }
-        public int Height { get { return PlayerAnimation.FrameHeight; } }
 
 
         Character character;
@@ -36,17 +33,23 @@ namespace _2DGame.Components
             isLogged = false;
         }
 
-        public void Initialize(Animation animation, Vector2 position)
+        public void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice)
         {
-            PlayerAnimation = animation; 
 
-            Position = position;
+            character = new Character();
+
+            character.Initialize(charactersTexture, 1, graphicsDevice);
+            Position = new Vector2(graphicsDevice.Viewport.TitleSafeArea.X + character.Width / 2,
+                graphicsDevice.Viewport.TitleSafeArea.Y + character.Height / 2 
+                + graphicsDevice.Viewport.TitleSafeArea.Height / 2);
+
             previousPosition = Position;
             Active = true;
 
-            playerMoveSpeed = 8.0f;
+            playerMoveSpeed = character.Speed;
 
-            character = new Character(1);
+
+
 
         }
 
@@ -59,8 +62,10 @@ namespace _2DGame.Components
 
             previousPosition = Position; //Update the previous position
 
-            PlayerAnimation.Position = this.Position; 
-            PlayerAnimation.Update(gameTime);
+            character.UpdatePosition(Position);
+
+
+            character.Update(gameTime);
 
         }
 
@@ -69,29 +74,29 @@ namespace _2DGame.Components
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                this.Position.X -= playerMoveSpeed;
+                this.Position.X -= character.Speed;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                this.Position.X += playerMoveSpeed;
+                this.Position.X += character.Speed;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
-                this.Position.Y -= playerMoveSpeed;
+                this.Position.Y -= character.Speed;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-                this.Position.Y += playerMoveSpeed;
+                this.Position.Y += character.Speed;
             }
 
-            this.Position.X = MathHelper.Clamp(this.Position.X, PlayerAnimation.FrameWidth/2,
-                graphicsDevice.Viewport.Width - (this.Width/2));
-            this.Position.Y = MathHelper.Clamp(this.Position.Y, PlayerAnimation.FrameHeight/2,
-                graphicsDevice.Viewport.Height - (this.Height/2));
-
+            this.Position.X = MathHelper.Clamp(this.Position.X, character.Width/2,
+                graphicsDevice.Viewport.Width - (character.Width/2));
+            this.Position.Y = MathHelper.Clamp(this.Position.Y, character.Height/2,
+                graphicsDevice.Viewport.Height - (character.Height/2));
+                
         }
 
 
@@ -100,10 +105,10 @@ namespace _2DGame.Components
             Rectangle playerBounds;
             Rectangle barrierBounds;
 
-            playerBounds = new Rectangle((int)this.Position.X,
+           playerBounds = new Rectangle((int)this.Position.X,
                 (int)this.Position.Y,
-                this.Width,
-                this.Height);
+                character.Width,
+                character.Height);
 
             for (int i = 0; i < barriers.Count; i++)
             { 
@@ -113,7 +118,7 @@ namespace _2DGame.Components
                     barriers[i].Width,
                     barriers[i].Height);
 
-                if (playerBounds.Intersects(barrierBounds))
+               if (playerBounds.Intersects(barrierBounds))
                 {
                     Console.WriteLine("Touching");
                     this.Position = previousPosition; //If is touching go back to the previous position 
@@ -127,8 +132,8 @@ namespace _2DGame.Components
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            PlayerAnimation.Draw(spriteBatch);
-
+            // PlayerAnimation.Draw(spriteBatch);
+            character.Draw(spriteBatch);
 
         }
 
