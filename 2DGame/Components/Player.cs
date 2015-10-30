@@ -77,9 +77,6 @@ namespace _2DGame.Components
                 this.Position.X += character.Speed;
             }
 
-            Console.WriteLine((graphicsDevice.Viewport.Height - (character.Height / 2)));
-            Console.WriteLine(this.Position.Y);
-
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
                 this.Position.Y -= character.Speed;
@@ -116,11 +113,61 @@ namespace _2DGame.Components
                     barriers[i].Width,
                     barriers[i].Height);
 
-               if (playerBounds.Intersects(barrierBounds))
+              /* 
+                Intersection, doesn't look at which edge
+                if (playerBounds.Intersects(barrierBounds))
                 {
                     Console.WriteLine("Touching");
                     this.Position = previousPosition; //If is touching go back to the previous position 
+                }*/
+
+
+                //looking for the edge touched and correct the position 
+                float w = 0.5f * (playerBounds.Width + barrierBounds.Width);
+                float h = 0.5f * (playerBounds.Height + barrierBounds.Height);
+
+                float dx = playerBounds.Center.X - barrierBounds.Center.X;
+                float dy = playerBounds.Center.Y - barrierBounds.Center.Y;
+
+
+                if (Math.Abs(dx) <= w && Math.Abs(dy)<= h)
+                {
+                    float wy = w * dy;
+                    float hx = h * dx;
+
+                    if(wy > hx)
+                    {
+                        if (wy > -hx)
+                        {
+                            Console.WriteLine("collision at top");
+                            this.Position.Y = barriers[i].Position.Y + barriers[i].Height;
+                        }
+                        else
+                        {
+                            Console.WriteLine("collision at right");
+                            this.Position.X = barriers[i].Position.X - barriers[i].Width;
+
+                        }
+                    }
+                    else
+                    {
+                        if (wy > -hx)
+                        {
+                            Console.WriteLine("collision on left");
+                            this.Position.X = barriers[i].Position.X + barriers[i].Width;
+
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("collision on bottom");
+                            this.Position.Y = barriers[i].Position.Y - barriers[i].Height;
+
+                        }
+                    }
+                    
                 }
+
 
             }
 

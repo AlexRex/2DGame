@@ -29,6 +29,7 @@ namespace _2DGame
 
         Random random;
 
+        Camera _camera;
 
         public Game1()
         {
@@ -40,7 +41,7 @@ namespace _2DGame
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
 
-    
+
         }
 
         /// <summary>
@@ -58,10 +59,13 @@ namespace _2DGame
             barriers = new List<Barrier>();
 
             previousBarrierSpawnTime = TimeSpan.Zero;
-            barrierSpawnTime = TimeSpan.FromSeconds(1.0f);
+            barrierSpawnTime = TimeSpan.FromSeconds(.5f);
 
             random = new Random();
-            
+
+            _camera = new Camera(GraphicsDevice.Viewport);
+
+       
 
             base.Initialize();
         }
@@ -75,7 +79,7 @@ namespace _2DGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            
+
 
             //Load all the textures for all the characters
 
@@ -96,8 +100,13 @@ namespace _2DGame
 
             barrierTexture = Content.Load<Texture2D>("Sprites/barrier");
 
-            AddBarrier();
             
+
+
+            AddBarrier();
+
+
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -118,6 +127,9 @@ namespace _2DGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -126,6 +138,9 @@ namespace _2DGame
             player.Update(gameTime, GraphicsDevice, barriers);
             UpdateBarrier(gameTime);
 
+
+
+            _camera.lookAt(player.Position);
 
             base.Update(gameTime);
         }
@@ -136,36 +151,38 @@ namespace _2DGame
 
             barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 64, 64, 1, 30, Color.White, 1f, true);
 
-            Vector2 position = new Vector2(random.Next(100, GraphicsDevice.Viewport.Width-100),
+            Vector2 position = new Vector2(random.Next(100, GraphicsDevice.Viewport.Width - 100),
                 random.Next(100, GraphicsDevice.Viewport.Height - 100));
+
 
             Barrier barrier = new Barrier();
 
             barrier.Initialize(barrierAnimation, position);
 
             barriers.Add(barrier);
+            Console.WriteLine("Barriers: {0}", barriers.Count);
         }
 
         private void UpdateBarrier(GameTime gameTime)
         {
-           /* if(gameTime.TotalGameTime - previousBarrierSpawnTime > barrierSpawnTime)
-            {
-                previousBarrierSpawnTime = gameTime.TotalGameTime;
-                AddBarrier();
-            }*/
+            /*if(gameTime.TotalGameTime - previousBarrierSpawnTime > barrierSpawnTime)
+             {
+                 previousBarrierSpawnTime = gameTime.TotalGameTime;
+                 AddBarrier();
+             }*/
 
-            for(int i = barriers.Count -1; i>=0; i--)
+            for (int i = barriers.Count - 1; i >= 0; i--)
             {
                 barriers[i].Update(gameTime);
-                if(barriers[i].Active == false)
+                if (barriers[i].Active == false)
                 {
                     barriers.RemoveAt(i);
                 }
             }
         }
 
-        
-        
+
+
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -175,11 +192,14 @@ namespace _2DGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            var viewMatrix = _camera.GetViewMatrix();
+
+
+            spriteBatch.Begin(transformMatrix: viewMatrix);
 
             player.Draw(spriteBatch);
 
-            for(int i=0; i<barriers.Count; i++)
+            for (int i = 0; i < barriers.Count; i++)
             {
                 barriers[i].Draw(spriteBatch);
             }
