@@ -90,36 +90,6 @@ namespace _2DGame
             charactersTexture.Add(ballFireTexture);
             charactersTexture.Add(squareTexture);
 
-            //Temporal
-            /*Texture2D playerTexture;
-
-            int selection = 0;
-
-            switch (selection)
-            {
-                case 0:
-                    playerTexture = Content.Load<Texture2D>("Sprites/ballfire");
-                    break;
-
-                case 1:
-                    playerTexture = Content.Load<Texture2D>("Sprites/player2");
-                    break;
-
-                default:
-                    playerTexture = Content.Load<Texture2D>("Sprites/player");
-                    break;
-            }*/
-
-
-            //Texture2D playerTexture = Content.Load<Texture2D>("Sprites/ballfire");
-
-
-            //  playerAnimation.Initialize(playerTexture, Vector2.Zero, 64, 64, 1, 100, Color.White, 1f, true);
-
-            /*Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X+playerAnimation.FrameWidth/2,
-                GraphicsDevice.Viewport.TitleSafeArea.Y + playerAnimation.FrameHeight/2 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-
-            */
 
             player.Initialize(charactersTexture, GraphicsDevice);
 

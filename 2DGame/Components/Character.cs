@@ -41,7 +41,7 @@ namespace _2DGame.Components
                 case 1:
                     Strength = 100;
                     Ammunition = 100;
-                    Speed = 10.0f;
+                    Speed = 20.0f;
                     animation.Initialize(charactersTexture.ElementAt(type), Vector2.Zero, 64, 64, 1, 100, Color.White, 1f, true);
                     break;
 

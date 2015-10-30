@@ -41,6 +41,7 @@
     <Compile Include="Components\Animation.cs" />
     <Compile Include="Components\Barrier.cs" />
     <Compile Include="Components\Character.cs" />
+    <Compile Include="Components\Projectile.cs" />
     <Compile Include="Engines\InputEngine.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Components\Player.cs" />

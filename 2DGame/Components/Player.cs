@@ -20,10 +20,7 @@ namespace _2DGame.Components
 
         public bool Active;
 
-        float playerMoveSpeed;
-
-
-
+       
 
         Character character;
 
@@ -46,9 +43,6 @@ namespace _2DGame.Components
             previousPosition = Position;
             Active = true;
 
-            playerMoveSpeed = character.Speed;
-
-
 
 
         }
@@ -57,6 +51,7 @@ namespace _2DGame.Components
         {
 
             handleInput(gameTime, graphicsDevice);
+
 
             UpdateCollision(barriers);
 
@@ -81,6 +76,9 @@ namespace _2DGame.Components
             {
                 this.Position.X += character.Speed;
             }
+
+            Console.WriteLine((graphicsDevice.Viewport.Height - (character.Height / 2)));
+            Console.WriteLine(this.Position.Y);
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
@@ -123,8 +121,7 @@ namespace _2DGame.Components
                     Console.WriteLine("Touching");
                     this.Position = previousPosition; //If is touching go back to the previous position 
                 }
-                else
-                    Console.WriteLine("Nope");
+
             }
 
 
