@@ -17,13 +17,20 @@ namespace _2DGame.Components
 
         public Vector2 Position;
         private Vector2 previousPosition; // Go to this position when collides to one barrier
+        int shootDirection;
+
+
 
         public bool Active;
 
-       
+        //Projectile
+        Texture2D projectileTexture;
+        List<Projectile> projectiles;
 
         Character character;
 
+
+        KeyboardState oldState;
 
         public Player()
         {
@@ -37,13 +44,19 @@ namespace _2DGame.Components
 
             character.Initialize(charactersTexture, 1, graphicsDevice);
             Position = new Vector2(graphicsDevice.Viewport.TitleSafeArea.X + character.Width / 2,
-                graphicsDevice.Viewport.TitleSafeArea.Y + character.Height / 2 
+                graphicsDevice.Viewport.TitleSafeArea.Y + character.Height / 2
                 + graphicsDevice.Viewport.TitleSafeArea.Height / 2);
 
             previousPosition = Position;
             Active = true;
+            shootDirection = 0;
+
+            //Init projectile
+            projectileTexture = charactersTexture.ElementAt(0);
+            projectiles = new List<Projectile>();
 
 
+            oldState = Keyboard.GetState();
 
         }
 
@@ -58,40 +71,69 @@ namespace _2DGame.Components
             previousPosition = Position; //Update the previous position
 
             character.UpdatePosition(Position);
-
-
             character.Update(gameTime);
+            
+            for (int i=0; i<projectiles.Count; i++)
+            {
+                
 
+                projectiles[i].Update(gameTime);
+                if (projectiles[i].Active == false)
+                {
+                    projectiles.RemoveAt(i);
+                }
+            }
         }
 
 
         private void handleInput(GameTime gameTime, GraphicsDevice graphicsDevice)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            var kbState = Keyboard.GetState();
+
+            if (kbState.IsKeyDown(Keys.Left))
             {
                 this.Position.X -= character.Speed;
+                shootDirection = 1;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            if (kbState.IsKeyDown(Keys.Right))
             {
                 this.Position.X += character.Speed;
+                shootDirection = 0;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            if (kbState.IsKeyDown(Keys.Up))
             {
                 this.Position.Y -= character.Speed;
+                shootDirection = 2;
+
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            if (kbState.IsKeyDown(Keys.Down))
             {
                 this.Position.Y += character.Speed;
+                shootDirection = 3;
+
             }
 
-            this.Position.X = MathHelper.Clamp(this.Position.X, character.Width/2,
-                graphicsDevice.Viewport.Width - (character.Width/2));
-            this.Position.Y = MathHelper.Clamp(this.Position.Y, character.Height/2,
-                graphicsDevice.Viewport.Height - (character.Height/2));
+            if (kbState.IsKeyDown(Keys.Space) && oldState.IsKeyUp(Keys.Space))
+            {
+                Projectile proj = new Projectile();
+                proj.Initialize(Position, shootDirection, projectileTexture);
+
+                projectiles.Add(proj);
                 
+            }
+
+           
+            oldState = kbState;
+
+
+            this.Position.X = MathHelper.Clamp(this.Position.X, character.Width / 2,
+                graphicsDevice.Viewport.Width - (character.Width / 2));
+            this.Position.Y = MathHelper.Clamp(this.Position.Y, character.Height / 2,
+                graphicsDevice.Viewport.Height - (character.Height / 2));
+
         }
 
 
@@ -100,26 +142,26 @@ namespace _2DGame.Components
             Rectangle playerBounds;
             Rectangle barrierBounds;
 
-           playerBounds = new Rectangle((int)this.Position.X,
-                (int)this.Position.Y,
-                character.Width,
-                character.Height);
+            playerBounds = new Rectangle((int)this.Position.X,
+                 (int)this.Position.Y,
+                 character.Width,
+                 character.Height);
 
             for (int i = 0; i < barriers.Count; i++)
-            { 
+            {
 
                 barrierBounds = new Rectangle((int)barriers[i].Position.X,
                     (int)barriers[i].Position.Y,
                     barriers[i].Width,
                     barriers[i].Height);
 
-              /* 
-                Intersection, doesn't look at which edge
-                if (playerBounds.Intersects(barrierBounds))
-                {
-                    Console.WriteLine("Touching");
-                    this.Position = previousPosition; //If is touching go back to the previous position 
-                }*/
+                /* 
+                  Intersection, doesn't look at which edge
+                  if (playerBounds.Intersects(barrierBounds))
+                  {
+                      Console.WriteLine("Touching");
+                      this.Position = previousPosition; //If is touching go back to the previous position 
+                  }*/
 
 
                 //looking for the edge touched and correct the position 
@@ -130,12 +172,12 @@ namespace _2DGame.Components
                 float dy = playerBounds.Center.Y - barrierBounds.Center.Y;
 
 
-                if (Math.Abs(dx) <= w && Math.Abs(dy)<= h)
+                if (Math.Abs(dx) <= w && Math.Abs(dy) <= h)
                 {
                     float wy = w * dy;
                     float hx = h * dx;
 
-                    if(wy > hx)
+                    if (wy > hx)
                     {
                         if (wy > -hx)
                         {
@@ -165,7 +207,7 @@ namespace _2DGame.Components
 
                         }
                     }
-                    
+
                 }
 
 
@@ -178,9 +220,12 @@ namespace _2DGame.Components
         {
             // PlayerAnimation.Draw(spriteBatch);
             character.Draw(spriteBatch);
-
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                projectiles[i].Draw(spriteBatch);
+            }
         }
 
-         
+
     }
 }

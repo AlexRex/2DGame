@@ -149,7 +149,7 @@ namespace _2DGame
         {
             Animation barrierAnimation = new Animation();
 
-            barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 64, 64, 1, 30, Color.White, 1f, true);
+            barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
 
             Vector2 position = new Vector2(random.Next(100, GraphicsDevice.Viewport.Width - 100),
                 random.Next(100, GraphicsDevice.Viewport.Height - 100));

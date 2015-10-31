@@ -20,7 +20,7 @@ namespace _2DGame.Components
             _viewport = viewport;
 
             Rotation = 0;
-            Zoom = 1;
+            Zoom = 1f;
             Origin = new Vector2(viewport.Width / 2f, viewport.Height / 2f);
             Position = Vector2.Zero;
         }
