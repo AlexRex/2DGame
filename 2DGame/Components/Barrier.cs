@@ -15,6 +15,8 @@ namespace _2DGame.Components
 
         public bool Active;
 
+        public float Health { get; set; }
+
         public int Width
         {
             get { return BarrierAnimation.FrameWidth; }
@@ -31,6 +33,7 @@ namespace _2DGame.Components
             BarrierAnimation = animation;
 
             Position = position;
+            Health = 100f;
 
             Active = true;
 
@@ -39,6 +42,11 @@ namespace _2DGame.Components
 
         public void Update(GameTime gameTime)
         {
+            if (Health <= 0)
+            {
+                this.Active = false;
+            }
+
             BarrierAnimation.Position = Position;
             BarrierAnimation.Update(gameTime);
 

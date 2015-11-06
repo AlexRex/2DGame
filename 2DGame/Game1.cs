@@ -17,6 +17,14 @@ namespace _2DGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        enum STATE
+        {
+            LoginMenu,
+            InitialMenu,
+            InGame
+        }
+
+        STATE GameState;
 
         Player player;
 
@@ -27,6 +35,7 @@ namespace _2DGame
         TimeSpan barrierSpawnTime;
         TimeSpan previousBarrierSpawnTime;
 
+        private Vector2 bPo;
         Random random;
 
         Camera _camera;
@@ -54,6 +63,8 @@ namespace _2DGame
         {
             // TODO: Add your initialization logic here
 
+            GameState = STATE.InGame;
+
             player = new Player();
 
             barriers = new List<Barrier>();
@@ -65,7 +76,7 @@ namespace _2DGame
 
             _camera = new Camera(GraphicsDevice.Viewport);
 
-       
+            bPo = new Vector2(16, 16);
 
             base.Initialize();
         }
@@ -135,24 +146,36 @@ namespace _2DGame
 
             // TODO: Add your update logic here
 
-            player.Update(gameTime, GraphicsDevice, barriers);
-            UpdateBarrier(gameTime);
+            if(GameState == STATE.InGame)
+            {
+                player.Update(gameTime, GraphicsDevice, barriers);
+                UpdateBarrier(gameTime);
 
+                _camera.lookAt(player.Position);
+            }
+            if(GameState == STATE.InitialMenu)
+            {
 
-
-            _camera.lookAt(player.Position);
+            }
+            
 
             base.Update(gameTime);
         }
 
+
+        private void createMenu()
+        {
+
+        }
+
         private void AddBarrier()
         {
+
             Animation barrierAnimation = new Animation();
 
             barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
 
-            Vector2 position = new Vector2(random.Next(100, GraphicsDevice.Viewport.Width - 100),
-                random.Next(100, GraphicsDevice.Viewport.Height - 100));
+            Vector2 position = bPo;
 
 
             Barrier barrier = new Barrier();
@@ -161,15 +184,16 @@ namespace _2DGame
 
             barriers.Add(barrier);
             Console.WriteLine("Barriers: {0}", barriers.Count);
+            bPo.Y += 32;
         }
 
         private void UpdateBarrier(GameTime gameTime)
         {
-            /*if(gameTime.TotalGameTime - previousBarrierSpawnTime > barrierSpawnTime)
+            if(gameTime.TotalGameTime - previousBarrierSpawnTime > barrierSpawnTime)
              {
                  previousBarrierSpawnTime = gameTime.TotalGameTime;
                  AddBarrier();
-             }*/
+             }
 
             for (int i = barriers.Count - 1; i >= 0; i--)
             {
@@ -197,12 +221,21 @@ namespace _2DGame
 
             spriteBatch.Begin(transformMatrix: viewMatrix);
 
-            player.Draw(spriteBatch);
-
-            for (int i = 0; i < barriers.Count; i++)
+            if(GameState == STATE.InGame)
             {
-                barriers[i].Draw(spriteBatch);
+                player.Draw(spriteBatch);
+
+                for (int i = 0; i < barriers.Count; i++)
+                {
+                    barriers[i].Draw(spriteBatch);
+                }
             }
+
+            else if(GameState == STATE.InitialMenu)
+            {
+
+            }
+            
 
             spriteBatch.End();
 

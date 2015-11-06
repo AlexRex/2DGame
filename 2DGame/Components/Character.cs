@@ -15,7 +15,7 @@ namespace _2DGame.Components
 
         public float Speed { get; set; }
 
-        public int Health { get; set; }
+        public float Health { get; set; }
 
 
         private Animation animation;
@@ -42,6 +42,7 @@ namespace _2DGame.Components
                     Strength = 100;
                     Ammunition = 100;
                     Speed = 10.0f;
+                    Health = 100f; 
                     animation.Initialize(charactersTexture.ElementAt(type), Vector2.Zero, 32, 32, 1, 100, Color.White, 1f, true);
                     break;
 

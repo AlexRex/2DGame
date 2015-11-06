@@ -72,12 +72,13 @@ namespace _2DGame.Components
 
             character.UpdatePosition(Position);
             character.Update(gameTime);
+
             
             for (int i=0; i<projectiles.Count; i++)
             {
                 
 
-                projectiles[i].Update(gameTime);
+                projectiles[i].Update(gameTime, barriers);
                 if (projectiles[i].Active == false)
                 {
                     projectiles.RemoveAt(i);
@@ -129,10 +130,10 @@ namespace _2DGame.Components
             oldState = kbState;
 
 
-            this.Position.X = MathHelper.Clamp(this.Position.X, character.Width / 2,
+          /*  this.Position.X = MathHelper.Clamp(this.Position.X, character.Width / 2,
                 graphicsDevice.Viewport.Width - (character.Width / 2));
             this.Position.Y = MathHelper.Clamp(this.Position.Y, character.Height / 2,
-                graphicsDevice.Viewport.Height - (character.Height / 2));
+                graphicsDevice.Viewport.Height - (character.Height / 2));*/
 
         }
 

@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace _2DGame.Components
 {
-    public class Projectile
+    class Projectile
     {
 
         float speed;
@@ -50,7 +50,7 @@ namespace _2DGame.Components
 
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, List<Barrier> barriers)
         {
             switch (direction)
             {
@@ -81,7 +81,41 @@ namespace _2DGame.Components
                 lifeTime.Stop();
             }
 
+            UpdateCollisionBarriers(barriers);
+
             sprite.Update(gameTime);
+        }
+
+        public void UpdateCollisionBarriers(List<Barrier> barriers)
+        {
+            Rectangle projectileBounds;
+            Rectangle barrierBounds;
+
+            projectileBounds = new Rectangle((int)sprite.Position.X,
+                 (int)sprite.Position.Y,
+                 sprite.FrameWidth,
+                 sprite.FrameHeight);
+
+
+            for (int i = 0; i < barriers.Count; i++)
+            {
+                if (barriers[i].Active)
+                {
+                    barrierBounds = new Rectangle((int)barriers[i].Position.X,
+                    (int)barriers[i].Position.Y,
+                    barriers[i].Width,
+                    barriers[i].Height);
+
+                    if (projectileBounds.Intersects(barrierBounds))
+                    {
+                        this.Active = false;
+                        Console.WriteLine("Projectile intersects barrier");
+                        barriers[i].Health -= Damage;
+                        Console.WriteLine(barriers[i].Health);
+                    }
+                }
+            }
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
