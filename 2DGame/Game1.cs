@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using Games3D.Engines;
 using System;
 using System.Collections.Generic;
 
@@ -17,20 +16,25 @@ namespace _2DGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        enum STATE
+        public enum STATE
         {
             LoginMenu,
             InitialMenu,
             InGame
         }
 
-        STATE GameState;
+        public STATE GameState;
 
         Player player;
+
+        Menu menu;
 
         //Barrier
         Texture2D barrierTexture;
         List<Barrier> barriers;
+
+        Texture2D background;
+        SpriteFont messageFont;
 
         TimeSpan barrierSpawnTime;
         TimeSpan previousBarrierSpawnTime;
@@ -47,8 +51,11 @@ namespace _2DGame
 
             graphics.IsFullScreen = false;
 
+
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
+
+            graphics.ApplyChanges();
 
 
         }
@@ -63,9 +70,11 @@ namespace _2DGame
         {
             // TODO: Add your initialization logic here
 
-            GameState = STATE.InGame;
+            GameState = STATE.InitialMenu;
 
             player = new Player();
+            menu = new Menu();
+
 
             barriers = new List<Barrier>();
 
@@ -90,7 +99,14 @@ namespace _2DGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            messageFont = Content.Load<SpriteFont>("SpriteFont/MessgaeFont");
 
+
+            //Background
+
+            background = Content.Load<Texture2D>("Backgrounds/backgroundTest");
+            Console.WriteLine(background);
+            
 
             //Load all the textures for all the characters
 
@@ -107,13 +123,11 @@ namespace _2DGame
 
 
             player.Initialize(charactersTexture, GraphicsDevice);
+            menu.Initialize(false, new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
+
 
 
             barrierTexture = Content.Load<Texture2D>("Sprites/barrier");
-
-            
-
-
             AddBarrier();
 
 
@@ -155,18 +169,13 @@ namespace _2DGame
             }
             if(GameState == STATE.InitialMenu)
             {
-
+                menu.Update(gameTime);
             }
-            
+
 
             base.Update(gameTime);
         }
 
-
-        private void createMenu()
-        {
-
-        }
 
         private void AddBarrier()
         {
@@ -223,6 +232,8 @@ namespace _2DGame
 
             if(GameState == STATE.InGame)
             {
+                spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
+
                 player.Draw(spriteBatch);
 
                 for (int i = 0; i < barriers.Count; i++)
@@ -233,9 +244,10 @@ namespace _2DGame
 
             else if(GameState == STATE.InitialMenu)
             {
-
+                //spriteBatch.DrawString(messageFont, "Holo", new Vector2(graphics.PreferredBackBufferWidth/2, graphics.PreferredBackBufferHeight/2), Color.Black);
+                menu.Draw(spriteBatch);
             }
-            
+
 
             spriteBatch.End();
 

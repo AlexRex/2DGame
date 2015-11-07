@@ -8,7 +8,7 @@ using System.Text;
 
 namespace _2DGame.Components
 {
-    class Player
+    class Enemy
     {
         private String id;
         private String password;
@@ -20,7 +20,6 @@ namespace _2DGame.Components
         int shootDirection;
 
 
-        public float Health { get; set; }
 
         public bool Active;
 
@@ -33,7 +32,7 @@ namespace _2DGame.Components
 
         KeyboardState oldState;
 
-        public Player()
+        public Enemy()
         {
             isLogged = false;
         }
@@ -51,7 +50,6 @@ namespace _2DGame.Components
             previousPosition = Position;
             Active = true;
             shootDirection = 0;
-            Health = 100f;
 
             //Init projectile
             projectileTexture = charactersTexture.ElementAt(0);
@@ -65,7 +63,7 @@ namespace _2DGame.Components
         public void Update(GameTime gameTime, GraphicsDevice graphicsDevice, List<Barrier> barriers)
         {
 
-            handleInput(gameTime, graphicsDevice);
+          //  handleInput(gameTime, graphicsDevice);
 
 
             UpdateCollision(barriers);
@@ -75,10 +73,10 @@ namespace _2DGame.Components
             character.UpdatePosition(Position);
             character.Update(gameTime);
 
-            
-            for (int i=0; i<projectiles.Count; i++)
+
+            for (int i = 0; i < projectiles.Count; i++)
             {
-                
+
 
                 projectiles[i].Update(gameTime, barriers);
                 if (projectiles[i].Active == false)
@@ -125,17 +123,17 @@ namespace _2DGame.Components
                 proj.Initialize(Position, shootDirection, projectileTexture);
 
                 projectiles.Add(proj);
-                
+
             }
 
-           
+
             oldState = kbState;
 
 
-          /*  this.Position.X = MathHelper.Clamp(this.Position.X, character.Width / 2,
-                graphicsDevice.Viewport.Width - (character.Width / 2));
-            this.Position.Y = MathHelper.Clamp(this.Position.Y, character.Height / 2,
-                graphicsDevice.Viewport.Height - (character.Height / 2));*/
+            /*  this.Position.X = MathHelper.Clamp(this.Position.X, character.Width / 2,
+                  graphicsDevice.Viewport.Width - (character.Width / 2));
+              this.Position.Y = MathHelper.Clamp(this.Position.Y, character.Height / 2,
+                  graphicsDevice.Viewport.Height - (character.Height / 2));*/
 
         }
 
