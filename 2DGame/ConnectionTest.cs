@@ -17,25 +17,28 @@ namespace _2DGame
         Player player;
         HubConnection connection;
 
-        public async void Initialize(Enemy enemy, Player player)
+        public void Initialize(Enemy enemy, Player player)
         {
             this.enemy = enemy;
             this.player = player;
-            //connection = new HubConnection("http://localhost:9685");
-            connection = new HubConnection("http://2dgameserver.azurewebsites.net/");
+            connection = new HubConnection("http://localhost:9685");
+            //connection = new HubConnection("http://2dgameserver.azurewebsites.net/");
             proxy = connection.CreateHubProxy("MoveEnemyTestHub");
             ServicePointManager.DefaultConnectionLimit = 10;
 
             //connection.Received += Connection_Received;
 
-            Action<float, float> EnemyReceived = received_enemy;
-            proxy.On("sendEnemy", EnemyReceived);
+            Action<float, float> EnemyPosReceived = received_enemy_position;
+            proxy.On("sendPosition", EnemyPosReceived);
 
+            Action EnemyActiveReceived = received_enemy_active;
+            proxy.On("sendActive", EnemyActiveReceived);
 
 
             Console.WriteLine("SERVER: Waiting for connection");
             try
             {
+                
                 connection.Start().Wait();
 
             }
@@ -49,23 +52,36 @@ namespace _2DGame
             }
         }
 
-        private void received_enemy(float enemyRec, float y)
-        {
-           // Console.WriteLine("SERVER: enemyRec position Y: {0}", enemyRec.Position.Y);
-            enemy.Position.X = enemyRec;
-            enemy.Position.Y = y;
-        }
-
-
 
         private void Connection_Received(string obj)
         {
             Console.WriteLine("Message Received {0}", obj);
         }
 
+
+        //Update Enemy
+        private void received_enemy_position(float x, float y)
+        {
+           // Console.WriteLine("SERVER: enemyRec position Y: {0}", enemyRec.Position.Y);
+            enemy.Position.X = x;
+            enemy.Position.Y = y;
+        }
+
+        private void received_enemy_active()
+        {
+            enemy.Active = !enemy.Active;
+        }
+
+
+        // Update player
         public void Update()
         {
-                proxy.Invoke("UpdatePlayer", player.Position.X, player.Position.Y);
+            proxy.Invoke("UpdatePlayerPosition", player.Position.X, player.Position.Y);
+        }
+
+        public void UpdateActive()
+        {
+            proxy.Invoke("UpdatePlayerActive");
         }
     }
 }

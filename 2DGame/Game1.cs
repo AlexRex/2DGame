@@ -180,8 +180,11 @@ namespace _2DGame
 
             if(GameState == STATE.InGame)
             {
-                if(player.Active)
+                if (player.Active)
+                {
                     player.Update(gameTime, barriers);
+                }
+
                 if (enemy.Active)
                     enemy.Update(gameTime, barriers);
 
@@ -191,6 +194,8 @@ namespace _2DGame
                 _camera.lookAt(player.Position);
 
                 con.Update();
+
+                
             }
             if(GameState == STATE.InitialMenu)
             {
