@@ -69,14 +69,7 @@ namespace _2DGame.Components
             character.Update(gameTime);
 
 
-            for (int i = 0; i < projectiles.Count; i++)
-            {
-                projectiles[i].Update(gameTime, barriers, this);
-                if (projectiles[i].Active == false)
-                {
-                    projectiles.RemoveAt(i);
-                }
-            }
+            
 
             con.Update();
         }
@@ -84,10 +77,10 @@ namespace _2DGame.Components
 
         private void UpdateBarrierCollision(List<Barrier> barriers)
         {
-            Rectangle playerBounds;
+            Rectangle superPj;
             Rectangle barrierBounds;
 
-            playerBounds = new Rectangle((int)this.Position.X,
+            superPj = new Rectangle((int)this.Position.X,
                  (int)this.Position.Y,
                  character.Width,
                  character.Height);
@@ -110,11 +103,11 @@ namespace _2DGame.Components
 
 
                 //looking for the edge touched and correct the position 
-                float w = 0.5f * (playerBounds.Width + barrierBounds.Width);
-                float h = 0.5f * (playerBounds.Height + barrierBounds.Height);
+                float w = 0.5f * (superPj.Width + barrierBounds.Width);
+                float h = 0.5f * (superPj.Height + barrierBounds.Height);
 
-                float dx = playerBounds.Center.X - barrierBounds.Center.X;
-                float dy = playerBounds.Center.Y - barrierBounds.Center.Y;
+                float dx = superPj.Center.X - barrierBounds.Center.X;
+                float dy = superPj.Center.Y - barrierBounds.Center.Y;
 
 
                 if (Math.Abs(dx) <= w && Math.Abs(dy) <= h)

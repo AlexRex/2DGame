@@ -45,6 +45,7 @@
     <Compile Include="Components\Enemy.cs" />
     <Compile Include="Components\Menu.cs" />
     <Compile Include="Components\Projectile.cs" />
+    <Compile Include="Components\SuperPj.cs" />
     <Compile Include="ConnectionTest.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Components\Player.cs" />

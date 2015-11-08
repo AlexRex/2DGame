@@ -52,37 +52,21 @@ namespace _2DGame.Components
 
         public override void Update(GameTime gameTime, List<Barrier> barriers)
         {
-           // Console.WriteLine(Health);
-            if (Health <= 0)
-            {
-                Active = false;
-            }
+
 
             handleInput(gameTime);
 
-
-            UpdateBarrierCollision(barriers);
             if(enemy.Active)
                 UpdateEnemyCollision();
 
-            previousPosition = Position; //Update the previous position
-
-            character.UpdatePosition(Position);
-            character.Update(gameTime);
-
-            
-            for (int i=0; i<projectiles.Count; i++)
+            for (int i = 0; i < projectiles.Count; i++)
             {
-                
-
                 projectiles[i].Update(gameTime, barriers, enemy);
                 if (projectiles[i].Active == false)
                 {
                     projectiles.RemoveAt(i);
                 }
             }
-
-            con.Update();
 
             base.Update(gameTime, barriers);
         }
@@ -118,7 +102,7 @@ namespace _2DGame.Components
 
             }
 
-            if (kbState.IsKeyDown(Keys.Space) && oldState.IsKeyUp(Keys.Space))
+            if (kbState.IsKeyDown(Keys.M) && oldState.IsKeyUp(Keys.M))
             {
                 Projectile proj = new Projectile();
                 proj.Initialize(Position, shootDirection, projectileTexture);
@@ -169,12 +153,12 @@ namespace _2DGame.Components
                 {
                     if (wy > -hx)
                     {
-                        Console.WriteLine("collision at top");
+                        //Console.WriteLine("PLAYER: collision at top");
                         this.Position.Y = enemy.Position.Y + enemy.character.Height;
                     }
                     else
                     {
-                        Console.WriteLine("collision at right");
+                        //Console.WriteLine("PLAYER: collision at right");
                         this.Position.X = enemy.Position.X - enemy.character.Width;
 
                     }
@@ -183,14 +167,14 @@ namespace _2DGame.Components
                 {
                     if (wy > -hx)
                     {
-                        Console.WriteLine("collision on left");
+                        //Console.WriteLine("PLAYER: collision on left");
                         this.Position.X = enemy.Position.X + enemy.character.Width;
 
 
                     }
                     else
                     {
-                        Console.WriteLine("collision on bottom");
+                        //Console.WriteLine("PLAYER: collision on bottom");
                         this.Position.Y = enemy.Position.Y - enemy.character.Height;
 
                     }
@@ -282,12 +266,6 @@ namespace _2DGame.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            // PlayerAnimation.Draw(spriteBatch);
-            character.Draw(spriteBatch);
-            for (int i = 0; i < projectiles.Count; i++)
-            {
-                projectiles[i].Draw(spriteBatch);
-            }
 
             base.Draw(spriteBatch);
         }

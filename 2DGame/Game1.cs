@@ -132,8 +132,8 @@ namespace _2DGame
             charactersTexture.Add(squareTexture);
 
 
-            player.Initialize(charactersTexture, GraphicsDevice, enemy, con);
-            enemy.Initialize(charactersTexture, GraphicsDevice);
+            player.Initialize(charactersTexture, GraphicsDevice, con, enemy);
+            enemy.Initialize(charactersTexture, GraphicsDevice, con, player);
 
 
 
@@ -181,7 +181,7 @@ namespace _2DGame
                 if(player.Active)
                     player.Update(gameTime, barriers);
                 if (enemy.Active)
-                    enemy.Update(gameTime, GraphicsDevice, barriers);
+                    enemy.Update(gameTime, barriers);
 
                 //Uncomment for adding barriers
                 //UpdateBarrier(gameTime); 
