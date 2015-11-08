@@ -8,44 +8,24 @@ using System.Text;
 
 namespace _2DGame.Components
 {
-    class Enemy
+    class Enemy : SuperPj
     {
         private String id;
         private String password;
         private bool isLogged;
 
-
-        public Vector2 Position;
-        private Vector2 previousPosition; // Go to this position when collides to one barrier
-        int shootDirection;
-
-
-        public float Health { get; set; }
-
-        public bool Active;
-
-        //Projectile
-        Texture2D projectileTexture;
-        List<Projectile> projectiles;
-
         Player player;
 
-        Character character;
-
-        ConnectionTest con;
-
         KeyboardState oldState;
-        GraphicsDevice graphicsDevice;
 
         public Enemy()
         {
             isLogged = false;
         }
 
-        public void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, Player player, ConnectionTest con)
+        public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Player player)
         {
-            this.graphicsDevice = graphicsDevice;
-            this.con = con;
+
             character = new Character();
 
             character.Initialize(charactersTexture, 1, graphicsDevice);
@@ -66,9 +46,11 @@ namespace _2DGame.Components
 
             oldState = Keyboard.GetState();
 
+            base.Initialize(charactersTexture, graphicsDevice, con, player);
+
         }
 
-        public void Update(GameTime gameTime, List<Barrier> barriers)
+        public override void Update(GameTime gameTime, List<Barrier> barriers)
         {
             // Console.WriteLine(Health);
             if (Health <= 0)
@@ -101,6 +83,8 @@ namespace _2DGame.Components
             }
 
             con.Update();
+
+            base.Update(gameTime, barriers);
         }
 
 
