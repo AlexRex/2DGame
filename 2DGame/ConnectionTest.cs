@@ -1,8 +1,10 @@
 ﻿using _2DGame.Components;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client.Transports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace _2DGame
@@ -15,16 +17,18 @@ namespace _2DGame
         Player player;
         HubConnection connection;
 
-        public void Initialize(Enemy enemy, Player player)
+        public async void Initialize(Enemy enemy, Player player)
         {
             this.enemy = enemy;
             this.player = player;
-            connection = new HubConnection("http://localhost:9685/");
+            //connection = new HubConnection("http://localhost:9685");
+            connection = new HubConnection("http://2dgameserver.azurewebsites.net/");
             proxy = connection.CreateHubProxy("MoveEnemyTestHub");
+            ServicePointManager.DefaultConnectionLimit = 10;
 
             //connection.Received += Connection_Received;
 
-            Action<Enemy> EnemyReceived = received_enemy;
+            Action<float, float> EnemyReceived = received_enemy;
             proxy.On("sendEnemy", EnemyReceived);
 
 
@@ -33,6 +37,7 @@ namespace _2DGame
             try
             {
                 connection.Start().Wait();
+
             }
             catch (Exception ex)
             {
@@ -44,10 +49,11 @@ namespace _2DGame
             }
         }
 
-        private void received_enemy(Enemy enemyRec)
+        private void received_enemy(float enemyRec, float y)
         {
-            Console.WriteLine("SERVER: enemyRec position Y: {0}", enemyRec.Position.Y);
-            //enemy.Position.Y = enemyRec.Position.Y;
+           // Console.WriteLine("SERVER: enemyRec position Y: {0}", enemyRec.Position.Y);
+            enemy.Position.X = enemyRec;
+            enemy.Position.Y = y;
         }
 
 
@@ -59,10 +65,7 @@ namespace _2DGame
 
         public void Update()
         {
-            if(connection.State == ConnectionState.Connected)
-            {
-                proxy.Invoke("UpdatePlayer", player);
-            }
+                proxy.Invoke("UpdatePlayer", player.Position.X, player.Position.Y);
         }
     }
 }
