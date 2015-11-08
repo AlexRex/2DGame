@@ -8,6 +8,7 @@ using System.Text;
 
 namespace _2DGame.Components
 {
+    [Serializable]
     class SuperPj
     {
 
@@ -71,7 +72,7 @@ namespace _2DGame.Components
 
             
 
-            con.Update();
+           // con.Update();
         }
 
 

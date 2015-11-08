@@ -8,6 +8,7 @@ using System.Text;
 
 namespace _2DGame.Components
 {
+    [Serializable]
     class Player : SuperPj
     {
         private String id;

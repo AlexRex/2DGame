@@ -58,6 +58,8 @@ namespace _2DGame
 
             graphics.ApplyChanges();
 
+            IsMouseVisible = true;
+
 
         }
 
@@ -187,6 +189,8 @@ namespace _2DGame
                 //UpdateBarrier(gameTime); 
 
                 _camera.lookAt(player.Position);
+
+                con.Update();
             }
             if(GameState == STATE.InitialMenu)
             {
