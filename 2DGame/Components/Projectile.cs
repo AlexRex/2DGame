@@ -50,7 +50,7 @@ namespace _2DGame.Components
 
         }
 
-        public void Update(GameTime gameTime, List<Barrier> barriers, Enemy enemy)
+        public void Update(GameTime gameTime, List<Barrier> barriers, SuperPj pj)
         {
             switch (direction)
             {
@@ -82,17 +82,17 @@ namespace _2DGame.Components
             }
 
             UpdateCollisionBarriers(barriers);
-            if(enemy.Active)
-                UpdateCollisionEnemy(enemy);
+            if(pj.Active)
+                UpdateCollisionPj(pj);
 
             sprite.Update(gameTime);
         }
 
 
-        public void UpdateCollisionEnemy(Enemy enemy)
+        public void UpdateCollisionPj(SuperPj pj)
         {
             Rectangle projectileBounds;
-            Rectangle enemyBounds;
+            Rectangle pjBounds;
 
 
             projectileBounds = new Rectangle((int)sprite.Position.X,
@@ -100,14 +100,14 @@ namespace _2DGame.Components
                  sprite.FrameWidth,
                  sprite.FrameHeight);
 
-            enemyBounds = new Rectangle((int)enemy.Position.X,
-                 (int)enemy.Position.Y,
-                 enemy.character.Width,
-                 enemy.character.Height);
+            pjBounds = new Rectangle((int)pj.Position.X,
+                 (int)pj.Position.Y,
+                 pj.character.Width,
+                 pj.character.Height);
 
-            if (projectileBounds.Intersects(enemyBounds))
+            if (projectileBounds.Intersects(pjBounds))
             {
-                enemy.Health -= Damage;
+                pj.Health -= Damage;
                 Active = false;
             }
         }

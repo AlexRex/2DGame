@@ -8,44 +8,24 @@ using System.Text;
 
 namespace _2DGame.Components
 {
-    class Enemy
+    class Enemy : SuperPj
     {
         private String id;
         private String password;
         private bool isLogged;
 
-
-        public Vector2 Position;
-        private Vector2 previousPosition; // Go to this position when collides to one barrier
-        int shootDirection;
-
-
-        public float Health { get; set; }
-
-        public bool Active;
-
-        //Projectile
-        Texture2D projectileTexture;
-        List<Projectile> projectiles;
-
         Player player;
 
-        Character character;
-
-        ConnectionTest con;
-
         KeyboardState oldState;
-        GraphicsDevice graphicsDevice;
 
         public Enemy()
         {
             isLogged = false;
         }
 
-        public void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, Player player, ConnectionTest con)
+        public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Player player)
         {
-            this.graphicsDevice = graphicsDevice;
-            this.con = con;
+
             character = new Character();
 
             character.Initialize(charactersTexture, 1, graphicsDevice);
@@ -66,41 +46,30 @@ namespace _2DGame.Components
 
             oldState = Keyboard.GetState();
 
+            base.Initialize(charactersTexture, graphicsDevice, con, player);
+
         }
 
-        public void Update(GameTime gameTime, List<Barrier> barriers)
+        public override void Update(GameTime gameTime, List<Barrier> barriers)
         {
-            // Console.WriteLine(Health);
-            if (Health <= 0)
-            {
-                Active = false;
-            }
+ 
 
-            handleInput(gameTime);
+           // handleInput(gameTime);
 
 
-            UpdateBarrierCollision(barriers);
             if (player.Active)
                 UpdatePlayerCollision();
 
-            previousPosition = Position; //Update the previous position
-
-            character.UpdatePosition(Position);
-            character.Update(gameTime);
-
-
             for (int i = 0; i < projectiles.Count; i++)
             {
-
-
-               // projectiles[i].Update(gameTime, barriers, this);
+                projectiles[i].Update(gameTime, barriers, player);
                 if (projectiles[i].Active == false)
                 {
                     projectiles.RemoveAt(i);
                 }
             }
 
-            con.Update();
+            base.Update(gameTime, barriers);
         }
 
 
@@ -108,26 +77,26 @@ namespace _2DGame.Components
         {
             var kbState = Keyboard.GetState();
 
-            if (kbState.IsKeyDown(Keys.Left))
+            if (kbState.IsKeyDown(Keys.A))
             {
                 this.Position.X -= character.Speed;
                 shootDirection = 1;
             }
 
-            if (kbState.IsKeyDown(Keys.Right))
+            if (kbState.IsKeyDown(Keys.D))
             {
                 this.Position.X += character.Speed;
                 shootDirection = 0;
             }
 
-            if (kbState.IsKeyDown(Keys.Up))
+            if (kbState.IsKeyDown(Keys.W))
             {
                 this.Position.Y -= character.Speed;
                 shootDirection = 2;
 
             }
 
-            if (kbState.IsKeyDown(Keys.Down))
+            if (kbState.IsKeyDown(Keys.S))
             {
                 this.Position.Y += character.Speed;
                 shootDirection = 3;
@@ -153,27 +122,27 @@ namespace _2DGame.Components
         }
 
 
-        private void UpdateEnemyCollision()
+        private void UpdatePlayerCollision()
         {
-            Rectangle playerBounds;
             Rectangle enemyBounds;
+            Rectangle plBounds;
 
-            playerBounds = new Rectangle((int)this.Position.X,
+            enemyBounds = new Rectangle((int)this.Position.X,
                  (int)this.Position.Y,
                  character.Width,
                  character.Height);
 
-            enemyBounds = new Rectangle((int)enemy.Position.X,
-                (int)enemy.Position.Y,
-                enemy.character.Width,
-                enemy.character.Height);
+            plBounds = new Rectangle((int)player.Position.X,
+                (int)player.Position.Y,
+                player.character.Width,
+                player.character.Height);
 
 
-            float w = 0.5f * (playerBounds.Width + enemyBounds.Width);
-            float h = 0.5f * (playerBounds.Height + enemyBounds.Height);
+            float w = 0.5f * (enemyBounds.Width + plBounds.Width);
+            float h = 0.5f * (enemyBounds.Height + plBounds.Height);
 
-            float dx = playerBounds.Center.X - enemyBounds.Center.X;
-            float dy = playerBounds.Center.Y - enemyBounds.Center.Y;
+            float dx = enemyBounds.Center.X - plBounds.Center.X;
+            float dy = enemyBounds.Center.Y - plBounds.Center.Y;
 
 
             if (Math.Abs(dx) <= w && Math.Abs(dy) <= h)
@@ -185,13 +154,13 @@ namespace _2DGame.Components
                 {
                     if (wy > -hx)
                     {
-                        Console.WriteLine("collision at top");
-                        this.Position.Y = enemy.Position.Y + enemy.character.Height;
+                        //Console.WriteLine("ENEMY: collision at top");
+                        this.Position.Y = player.Position.Y + player.character.Height;
                     }
                     else
                     {
-                        Console.WriteLine("collision at right");
-                        this.Position.X = enemy.Position.X - enemy.character.Width;
+                        //Console.WriteLine("ENEMY: collision at right");
+                        this.Position.X = player.Position.X - player.character.Width;
 
                     }
                 }
@@ -199,15 +168,15 @@ namespace _2DGame.Components
                 {
                     if (wy > -hx)
                     {
-                        Console.WriteLine("collision on left");
-                        this.Position.X = enemy.Position.X + enemy.character.Width;
+                        //Console.WriteLine("ENEMY: collision on left");
+                        this.Position.X = player.Position.X + player.character.Width;
 
 
                     }
                     else
                     {
-                        Console.WriteLine("collision on bottom");
-                        this.Position.Y = enemy.Position.Y - enemy.character.Height;
+                        //Console.WriteLine("ENEMY: collision on bottom");
+                        this.Position.Y = player.Position.Y - player.character.Height;
 
                     }
                 }
@@ -296,15 +265,13 @@ namespace _2DGame.Components
 
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            // PlayerAnimation.Draw(spriteBatch);
-            character.Draw(spriteBatch);
-            for (int i = 0; i < projectiles.Count; i++)
-            {
-                projectiles[i].Draw(spriteBatch);
-            }
+
+            base.Draw(spriteBatch);
         }
+
+       
 
 
     }
