@@ -20,6 +20,7 @@ namespace _2DGame.Components
         int shootDirection;
 
 
+        public float Health { get; set; }
 
         public bool Active;
 
@@ -27,19 +28,24 @@ namespace _2DGame.Components
         Texture2D projectileTexture;
         List<Projectile> projectiles;
 
+        Player player;
+
         Character character;
 
+        ConnectionTest con;
 
         KeyboardState oldState;
+        GraphicsDevice graphicsDevice;
 
         public Enemy()
         {
             isLogged = false;
         }
 
-        public void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice)
+        public void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, Player player, ConnectionTest con)
         {
-
+            this.graphicsDevice = graphicsDevice;
+            this.con = con;
             character = new Character();
 
             character.Initialize(charactersTexture, 1, graphicsDevice);
@@ -50,23 +56,32 @@ namespace _2DGame.Components
             previousPosition = Position;
             Active = true;
             shootDirection = 0;
+            Health = 100f;
 
             //Init projectile
             projectileTexture = charactersTexture.ElementAt(0);
             projectiles = new List<Projectile>();
 
+            this.player = player;
 
             oldState = Keyboard.GetState();
 
         }
 
-        public void Update(GameTime gameTime, GraphicsDevice graphicsDevice, List<Barrier> barriers)
+        public void Update(GameTime gameTime, List<Barrier> barriers)
         {
+            // Console.WriteLine(Health);
+            if (Health <= 0)
+            {
+                Active = false;
+            }
 
-          //  handleInput(gameTime, graphicsDevice);
+            handleInput(gameTime);
 
 
-            UpdateCollision(barriers);
+            UpdateBarrierCollision(barriers);
+            if (player.Active)
+                UpdatePlayerCollision();
 
             previousPosition = Position; //Update the previous position
 
@@ -78,16 +93,18 @@ namespace _2DGame.Components
             {
 
 
-                projectiles[i].Update(gameTime, barriers);
+               // projectiles[i].Update(gameTime, barriers, this);
                 if (projectiles[i].Active == false)
                 {
                     projectiles.RemoveAt(i);
                 }
             }
+
+            con.Update();
         }
 
 
-        private void handleInput(GameTime gameTime, GraphicsDevice graphicsDevice)
+        private void handleInput(GameTime gameTime)
         {
             var kbState = Keyboard.GetState();
 
@@ -121,9 +138,7 @@ namespace _2DGame.Components
             {
                 Projectile proj = new Projectile();
                 proj.Initialize(Position, shootDirection, projectileTexture);
-
                 projectiles.Add(proj);
-
             }
 
 
@@ -138,7 +153,71 @@ namespace _2DGame.Components
         }
 
 
-        private void UpdateCollision(List<Barrier> barriers)
+        private void UpdateEnemyCollision()
+        {
+            Rectangle playerBounds;
+            Rectangle enemyBounds;
+
+            playerBounds = new Rectangle((int)this.Position.X,
+                 (int)this.Position.Y,
+                 character.Width,
+                 character.Height);
+
+            enemyBounds = new Rectangle((int)enemy.Position.X,
+                (int)enemy.Position.Y,
+                enemy.character.Width,
+                enemy.character.Height);
+
+
+            float w = 0.5f * (playerBounds.Width + enemyBounds.Width);
+            float h = 0.5f * (playerBounds.Height + enemyBounds.Height);
+
+            float dx = playerBounds.Center.X - enemyBounds.Center.X;
+            float dy = playerBounds.Center.Y - enemyBounds.Center.Y;
+
+
+            if (Math.Abs(dx) <= w && Math.Abs(dy) <= h)
+            {
+                float wy = w * dy;
+                float hx = h * dx;
+
+                if (wy > hx)
+                {
+                    if (wy > -hx)
+                    {
+                        Console.WriteLine("collision at top");
+                        this.Position.Y = enemy.Position.Y + enemy.character.Height;
+                    }
+                    else
+                    {
+                        Console.WriteLine("collision at right");
+                        this.Position.X = enemy.Position.X - enemy.character.Width;
+
+                    }
+                }
+                else
+                {
+                    if (wy > -hx)
+                    {
+                        Console.WriteLine("collision on left");
+                        this.Position.X = enemy.Position.X + enemy.character.Width;
+
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("collision on bottom");
+                        this.Position.Y = enemy.Position.Y - enemy.character.Height;
+
+                    }
+                }
+
+            }
+
+
+        }
+
+        private void UpdateBarrierCollision(List<Barrier> barriers)
         {
             Rectangle playerBounds;
             Rectangle barrierBounds;

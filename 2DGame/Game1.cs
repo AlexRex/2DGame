@@ -26,7 +26,8 @@ namespace _2DGame
         public STATE GameState;
 
         Player player;
-
+        Enemy enemy;
+        ConnectionTest con; 
         Menu menu;
 
         //Barrier
@@ -70,22 +71,32 @@ namespace _2DGame
         {
             // TODO: Add your initialization logic here
 
+            //State of the game.
             GameState = STATE.InitialMenu;
 
+            
+
+            //Create the two players
             player = new Player();
+            enemy = new Enemy();
+
+            //Create the menu
             menu = new Menu();
 
-
+            //List for barriers; Helpers for spawning new barriers each .5 seconds
             barriers = new List<Barrier>();
-
             previousBarrierSpawnTime = TimeSpan.Zero;
             barrierSpawnTime = TimeSpan.FromSeconds(.5f);
-
+            //Barreir position
+            bPo = new Vector2(16, 16);
+            //Random number for the position of the new barriers (not using now)
             random = new Random();
 
+            //New camera object
             _camera = new Camera(GraphicsDevice.Viewport);
 
-            bPo = new Vector2(16, 16);
+            //Create a connection with the server (actual: localhost)
+            con = new ConnectionTest();
 
             base.Initialize();
         }
@@ -103,9 +114,8 @@ namespace _2DGame
 
 
             //Background
-
             background = Content.Load<Texture2D>("Backgrounds/backgroundTest");
-            Console.WriteLine(background);
+            //Console.WriteLine(background);
             
 
             //Load all the textures for all the characters
@@ -122,13 +132,19 @@ namespace _2DGame
             charactersTexture.Add(squareTexture);
 
 
-            player.Initialize(charactersTexture, GraphicsDevice);
+            player.Initialize(charactersTexture, GraphicsDevice, enemy, con);
+            enemy.Initialize(charactersTexture, GraphicsDevice);
+
+
+
             menu.Initialize(false, new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
 
 
 
             barrierTexture = Content.Load<Texture2D>("Sprites/barrier");
             AddBarrier();
+
+            con.Initialize(enemy, player);
 
 
 
@@ -162,8 +178,13 @@ namespace _2DGame
 
             if(GameState == STATE.InGame)
             {
-                player.Update(gameTime, GraphicsDevice, barriers);
-                UpdateBarrier(gameTime);
+                if(player.Active)
+                    player.Update(gameTime, barriers);
+                if (enemy.Active)
+                    enemy.Update(gameTime, GraphicsDevice, barriers);
+
+                //Uncomment for adding barriers
+                //UpdateBarrier(gameTime); 
 
                 _camera.lookAt(player.Position);
             }
@@ -192,7 +213,7 @@ namespace _2DGame
             barrier.Initialize(barrierAnimation, position);
 
             barriers.Add(barrier);
-            Console.WriteLine("Barriers: {0}", barriers.Count);
+           // Console.WriteLine("Barriers: {0}", barriers.Count);
             bPo.Y += 32;
         }
 
@@ -234,7 +255,10 @@ namespace _2DGame
             {
                 spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
 
-                player.Draw(spriteBatch);
+                if(player.Active)
+                    player.Draw(spriteBatch);
+                if (enemy.Active)
+                    enemy.Draw(spriteBatch);
 
                 for (int i = 0; i < barriers.Count; i++)
                 {

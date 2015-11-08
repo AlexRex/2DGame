@@ -33,7 +33,7 @@ namespace _2DGame.Components
 
             direction = shootDirection;
 
-            Console.WriteLine("new projectile");
+           // Console.WriteLine("new projectile");
             Position = initialPosition;
 
             sprite = new Animation();
@@ -50,7 +50,7 @@ namespace _2DGame.Components
 
         }
 
-        public void Update(GameTime gameTime, List<Barrier> barriers)
+        public void Update(GameTime gameTime, List<Barrier> barriers, Enemy enemy)
         {
             switch (direction)
             {
@@ -82,8 +82,34 @@ namespace _2DGame.Components
             }
 
             UpdateCollisionBarriers(barriers);
+            if(enemy.Active)
+                UpdateCollisionEnemy(enemy);
 
             sprite.Update(gameTime);
+        }
+
+
+        public void UpdateCollisionEnemy(Enemy enemy)
+        {
+            Rectangle projectileBounds;
+            Rectangle enemyBounds;
+
+
+            projectileBounds = new Rectangle((int)sprite.Position.X,
+                 (int)sprite.Position.Y,
+                 sprite.FrameWidth,
+                 sprite.FrameHeight);
+
+            enemyBounds = new Rectangle((int)enemy.Position.X,
+                 (int)enemy.Position.Y,
+                 enemy.character.Width,
+                 enemy.character.Height);
+
+            if (projectileBounds.Intersects(enemyBounds))
+            {
+                enemy.Health -= Damage;
+                Active = false;
+            }
         }
 
         public void UpdateCollisionBarriers(List<Barrier> barriers)
