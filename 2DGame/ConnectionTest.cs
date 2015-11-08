@@ -76,12 +76,14 @@ namespace _2DGame
         // Update player
         public void Update()
         {
-            proxy.Invoke("UpdatePlayerPosition", player.Position.X, player.Position.Y);
+            if (connection.State == ConnectionState.Connected)
+                proxy.Invoke("UpdatePlayerPosition", player.Position.X, player.Position.Y);
         }
 
         public void UpdateActive()
         {
-            proxy.Invoke("UpdatePlayerActive");
+            if (connection.State == ConnectionState.Connected)
+                proxy.Invoke("UpdatePlayerActive");
         }
     }
 }

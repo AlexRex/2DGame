@@ -27,7 +27,7 @@ namespace _2DGame.Components
 
         public Projectile(){}
 
-        public void Initialize(Vector2 initialPosition, int shootDirection, Texture2D texture)
+        public void Initialize(Vector2 initialPosition, int shootDirection, Texture2D texture, float Damage)
         {
             speed = 20f;
 
@@ -40,7 +40,7 @@ namespace _2DGame.Components
 
             sprite.Initialize(texture, Position, 64, 64, 3, 30, Color.White, 1, true);
 
-            Damage = 15f;
+            this.Damage = Damage;
             Active = true;
 
             spawnDuration = TimeSpan.FromSeconds(.5f);

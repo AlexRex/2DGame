@@ -47,7 +47,8 @@
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\Character.cs" />
     <Compile Include="Components\Enemy.cs" />
-    <Compile Include="Components\Menu.cs" />
+    <Compile Include="Menus\CharacterSelection.cs" />
+    <Compile Include="Menus\InitialMenu.cs" />
     <Compile Include="Components\Projectile.cs" />
     <Compile Include="Components\SuperPj.cs" />
     <Compile Include="ConnectionTest.cs" />

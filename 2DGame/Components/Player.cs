@@ -105,9 +105,14 @@ namespace _2DGame.Components
 
             if (kbState.IsKeyDown(Keys.M) && oldState.IsKeyUp(Keys.M))
             {
-                Projectile proj = new Projectile();
-                proj.Initialize(Position, shootDirection, projectileTexture);
-                projectiles.Add(proj);
+                if (character.Ammunition > 0)
+                {
+                    Projectile proj = new Projectile();
+                    proj.Initialize(Position, shootDirection, projectileTexture, character.Strength);
+                    projectiles.Add(proj);
+                    character.Ammunition--;
+                }
+                
             }
 
            

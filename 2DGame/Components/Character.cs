@@ -34,15 +34,21 @@ namespace _2DGame.Components
         {
 
             animation = new Animation();
+            Health = 100f;
 
 
             switch (type)
             {
-                case 1:
-                    Strength = 100;
-                    Ammunition = 100;
+                case 0:
+                    Strength = 30;
+                    Ammunition = 10;
                     Speed = 10.0f;
-                    Health = 100f; 
+                    animation.Initialize(charactersTexture.ElementAt(type), Vector2.Zero, 32, 32, 1, 100, Color.White, 1f, true);
+                    break;
+                case 1:
+                    Strength = 15;
+                    Ammunition = 10;
+                    Speed = 20.0f;
                     animation.Initialize(charactersTexture.ElementAt(type), Vector2.Zero, 32, 32, 1, 100, Color.White, 1f, true);
                     break;
 
@@ -50,6 +56,7 @@ namespace _2DGame.Components
                     Strength = 100;
                     Ammunition = 100;
                     Speed = 1.0f;
+                    animation.Initialize(charactersTexture.ElementAt(type), Vector2.Zero, 32, 32, 1, 100, Color.White, 1f, true);
                     break;
 
             }

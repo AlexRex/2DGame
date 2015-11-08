@@ -29,7 +29,7 @@ namespace _2DGame.Components
 
             character = new Character();
 
-            character.Initialize(charactersTexture, 1, graphicsDevice);
+            character.Initialize(charactersTexture, 0, graphicsDevice);
             Position = new Vector2(graphicsDevice.Viewport.TitleSafeArea.X + character.Width / 2,
                 graphicsDevice.Viewport.TitleSafeArea.Y + character.Height / 2
                 + graphicsDevice.Viewport.TitleSafeArea.Height / 2);
@@ -55,7 +55,7 @@ namespace _2DGame.Components
         {
  
 
-           // handleInput(gameTime);
+           handleInput(gameTime);
 
 
             if (player.Active)
@@ -106,9 +106,13 @@ namespace _2DGame.Components
 
             if (kbState.IsKeyDown(Keys.Space) && oldState.IsKeyUp(Keys.Space))
             {
-                Projectile proj = new Projectile();
-                proj.Initialize(Position, shootDirection, projectileTexture);
-                projectiles.Add(proj);
+                if (character.Ammunition > 0)
+                {
+                    Projectile proj = new Projectile();
+                    proj.Initialize(Position, shootDirection, projectileTexture, character.Strength);
+                    projectiles.Add(proj);
+                    character.Ammunition--;
+                }
             }
 
 
