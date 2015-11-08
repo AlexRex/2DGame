@@ -1,4 +1,5 @@
 ﻿using _2DGame.Components;
+using _2DGame.Menus;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -20,6 +21,7 @@ namespace _2DGame
         {
             LoginMenu,
             InitialMenu,
+            CharacterSelectionMenu,
             InGame
         }
 
@@ -28,7 +30,10 @@ namespace _2DGame
         Player player;
         Enemy enemy;
         ConnectionTest con; 
-        Menu menu;
+
+        //Menus
+        InitialMenu initMenu;
+        CharacterSelection charMenu;
 
         //Barrier
         Texture2D barrierTexture;
@@ -83,7 +88,9 @@ namespace _2DGame
             enemy = new Enemy();
 
             //Create the menu
-            menu = new Menu();
+            initMenu = new InitialMenu();
+            charMenu = new CharacterSelection();
+
 
             //List for barriers; Helpers for spawning new barriers each .5 seconds
             barriers = new List<Barrier>();
@@ -139,7 +146,8 @@ namespace _2DGame
 
 
 
-            menu.Initialize(false, new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
+            initMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
+            charMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
 
 
 
@@ -197,9 +205,13 @@ namespace _2DGame
 
                 
             }
-            if(GameState == STATE.InitialMenu)
+            else if(GameState == STATE.InitialMenu)
             {
-                menu.Update(gameTime);
+                initMenu.Update(gameTime);
+            }
+            else if(GameState == STATE.CharacterSelectionMenu)
+            {
+                charMenu.Update(gameTime);
             }
 
 
@@ -277,8 +289,11 @@ namespace _2DGame
 
             else if(GameState == STATE.InitialMenu)
             {
-                //spriteBatch.DrawString(messageFont, "Holo", new Vector2(graphics.PreferredBackBufferWidth/2, graphics.PreferredBackBufferHeight/2), Color.Black);
-                menu.Draw(spriteBatch);
+                initMenu.Draw(spriteBatch);
+            }
+            else if (GameState == STATE.CharacterSelectionMenu)
+            {
+                charMenu.Draw(spriteBatch);
             }
 
 

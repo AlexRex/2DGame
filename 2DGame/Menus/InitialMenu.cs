@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace _2DGame.Components
+namespace _2DGame.Menus
 {
-    class Menu
+    class InitialMenu
     {
 
-        bool type;
         int active;
 
         Game1 game;
@@ -22,9 +21,8 @@ namespace _2DGame.Components
 
         KeyboardState oldState;
 
-        public void Initialize(bool type, Vector2 screenDimension, SpriteFont font, Game1 game)
+        public void Initialize(Vector2 screenDimension, SpriteFont font, Game1 game)
         {
-            this.type = type;
             this.screenDimension = screenDimension;
             spFont = font;
 
@@ -56,9 +54,10 @@ namespace _2DGame.Components
                 active++;
             }
 
-            else if (kbState.IsKeyDown(Keys.Enter))
-            { 
-                game.GameState = Game1.STATE.InGame;
+            else if (kbState.IsKeyDown(Keys.Enter) && oldState.IsKeyUp(Keys.Enter))
+            {
+                Keyboard.GetState();
+                game.GameState = Game1.STATE.CharacterSelectionMenu;
             }
 
             if (active > 2)
