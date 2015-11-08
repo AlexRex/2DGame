@@ -22,12 +22,14 @@ namespace _2DGame
             connection = new HubConnection("http://localhost:9685/");
             proxy = connection.CreateHubProxy("MoveEnemyTestHub");
 
-           // connection.Received += Connection_Received;
+            //connection.Received += Connection_Received;
 
-            Action<Player> PlayerReceived = received_player;
-            proxy.On("sendPlayer", PlayerReceived);
+            Action<Enemy> EnemyReceived = received_enemy;
+            proxy.On("sendEnemy", EnemyReceived);
 
-            Console.WriteLine("Waiting for connection");
+
+
+            Console.WriteLine("SERVER: Waiting for connection");
             try
             {
                 connection.Start().Wait();
@@ -38,17 +40,16 @@ namespace _2DGame
             }
             if (connection.State == ConnectionState.Connected)
             {
-                Console.WriteLine("invoking");
-                proxy.Invoke("UpdatePlayer", player);
-                //proxy.Invoke("GetPoint");
+                Console.WriteLine("--SERVER: CONNECTED--");
             }
         }
 
-        private void received_player(Player obj)
+        private void received_enemy(Enemy enemyRec)
         {
-            Console.WriteLine(obj.Position.Y);
-            enemy.Position.Y = obj.Position.Y;
+            Console.WriteLine("SERVER: enemyRec position Y: {0}", enemyRec.Position.Y);
+            //enemy.Position.Y = enemyRec.Position.Y;
         }
+
 
 
         private void Connection_Received(string obj)
@@ -59,7 +60,9 @@ namespace _2DGame
         public void Update()
         {
             if(connection.State == ConnectionState.Connected)
+            {
                 proxy.Invoke("UpdatePlayer", player);
+            }
         }
     }
 }

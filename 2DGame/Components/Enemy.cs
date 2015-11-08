@@ -54,7 +54,7 @@ namespace _2DGame.Components
         {
  
 
-            handleInput(gameTime);
+           // handleInput(gameTime);
 
 
             if (player.Active)
