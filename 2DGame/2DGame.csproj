@@ -47,6 +47,7 @@
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\Character.cs" />
     <Compile Include="Components\Enemy.cs" />
+    <Compile Include="Components\Level.cs" />
     <Compile Include="Menus\CharacterSelection.cs" />
     <Compile Include="Menus\InitialMenu.cs" />
     <Compile Include="Components\Projectile.cs" />
