@@ -36,7 +36,6 @@ namespace _2DGame.Menus
         public void Update(GameTime gameTime)
         {
             handleInput(gameTime);
-            
         }
 
         private void handleInput(GameTime gameTime)
@@ -56,7 +55,6 @@ namespace _2DGame.Menus
 
             else if (kbState.IsKeyDown(Keys.Enter) && oldState.IsKeyUp(Keys.Enter))
             {
-                Keyboard.GetState();
                 game.GameState = Game1.STATE.CharacterSelectionMenu;
             }
 
@@ -75,23 +73,25 @@ namespace _2DGame.Menus
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            int posX = 150;
+            int posY = 380;
             if (active == 0)
             {
-                spriteBatch.DrawString(spFont, "Play", screenDimension / 2, Color.Black);
-                spriteBatch.DrawString(spFont, "Login", new Vector2(screenDimension.X / 2, screenDimension.Y / 2 + 60), Color.White);
-                spriteBatch.DrawString(spFont, "Register", new Vector2(screenDimension.X / 2, screenDimension.Y / 2 + +120), Color.White);
+                spriteBatch.DrawString(spFont, "Play", new Vector2(posX, posY), Color.Black);
+                spriteBatch.DrawString(spFont, "Login", new Vector2(posX, posY + 60), Color.White);
+                spriteBatch.DrawString(spFont, "Register", new Vector2(posX, posY + 120), Color.White);
             }
             else if(active == 1)
             {
-                spriteBatch.DrawString(spFont, "Play", screenDimension / 2, Color.White);
-                spriteBatch.DrawString(spFont, "Login", new Vector2(screenDimension.X / 2, screenDimension.Y / 2 + 60), Color.Black);
-                spriteBatch.DrawString(spFont, "Register", new Vector2(screenDimension.X / 2, screenDimension.Y / 2 + +120), Color.White);
+                spriteBatch.DrawString(spFont, "Play", new Vector2(posX, posY), Color.White);
+                spriteBatch.DrawString(spFont, "Login", new Vector2(posX, posY + 60), Color.Black);
+                spriteBatch.DrawString(spFont, "Register", new Vector2(posX, posY + 120), Color.White);
             }
             else if (active == 2)
             {
-                spriteBatch.DrawString(spFont, "Play", screenDimension / 2, Color.White);
-                spriteBatch.DrawString(spFont, "Login", new Vector2(screenDimension.X / 2, screenDimension.Y / 2 + 60), Color.White);
-                spriteBatch.DrawString(spFont, "Register", new Vector2(screenDimension.X / 2, screenDimension.Y / 2 + +120), Color.Black);
+                spriteBatch.DrawString(spFont, "Play", new Vector2(posX, posY), Color.White);
+                spriteBatch.DrawString(spFont, "Login", new Vector2(posX, posY + 60), Color.White);
+                spriteBatch.DrawString(spFont, "Register", new Vector2(posX, posY + 120), Color.Black);
 
             }
 

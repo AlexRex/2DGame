@@ -27,6 +27,8 @@ namespace _2DGame
 
         public STATE GameState;
 
+        Level level;
+
         Player player;
         Enemy enemy;
         ConnectionTest con; 
@@ -34,12 +36,15 @@ namespace _2DGame
         //Menus
         InitialMenu initMenu;
         CharacterSelection charMenu;
+        public int playerChar;
 
         //Barrier
         Texture2D barrierTexture;
         List<Barrier> barriers;
 
         Texture2D background;
+        Texture2D backgroundMenu;
+
         SpriteFont messageFont;
 
         TimeSpan barrierSpawnTime;
@@ -49,6 +54,9 @@ namespace _2DGame
         Random random;
 
         Camera _camera;
+
+        public Color bgColor;
+        public Color blackColor = new Color(51, 51, 51);
 
         public Game1()
         {
@@ -78,18 +86,23 @@ namespace _2DGame
         {
             // TODO: Add your initialization logic here
 
+            bgColor = new Color(0, 167, 254);
+
             //State of the game.
             GameState = STATE.InitialMenu;
 
-            
+            playerChar = 0;
 
             //Create the two players
             player = new Player();
             enemy = new Enemy();
 
+            level = new Level();
+
             //Create the menu
             initMenu = new InitialMenu();
             charMenu = new CharacterSelection();
+
 
 
             //List for barriers; Helpers for spawning new barriers each .5 seconds
@@ -97,7 +110,7 @@ namespace _2DGame
             previousBarrierSpawnTime = TimeSpan.Zero;
             barrierSpawnTime = TimeSpan.FromSeconds(.5f);
             //Barreir position
-            bPo = new Vector2(16, 16);
+            bPo = new Vector2(8, 8);
             //Random number for the position of the new barriers (not using now)
             random = new Random();
 
@@ -119,14 +132,33 @@ namespace _2DGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            messageFont = Content.Load<SpriteFont>("SpriteFont/MessgaeFont");
+            messageFont = Content.Load<SpriteFont>("SpriteFont/Animatic");
 
+            barrierTexture = Content.Load<Texture2D>("Sprites/WallTile");
 
             //Background
-            background = Content.Load<Texture2D>("Backgrounds/backgroundTest");
+            background = Content.Load<Texture2D>("Backgrounds/background0");
+            backgroundMenu = Content.Load<Texture2D>("Backgrounds/backgroundMenu");
             //Console.WriteLine(background);
-            
 
+            initMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
+            charMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
+
+            level.Initialize(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, barrierTexture);
+
+
+
+
+            con.Initialize(enemy, player);
+
+
+
+
+            // TODO: use this.Content to load your game content here
+        }
+
+        public void initializeUsers()
+        {
             //Load all the textures for all the characters
 
             Texture2D ballFireTexture;
@@ -141,25 +173,10 @@ namespace _2DGame
             charactersTexture.Add(squareTexture);
 
 
-            player.Initialize(charactersTexture, GraphicsDevice, con, enemy);
-            enemy.Initialize(charactersTexture, GraphicsDevice, con, player);
+            player.Initialize(charactersTexture, GraphicsDevice, con, enemy, playerChar);
+            enemy.Initialize(charactersTexture, GraphicsDevice, con, player, playerChar);
 
 
-
-            initMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
-            charMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
-
-
-
-            barrierTexture = Content.Load<Texture2D>("Sprites/barrier");
-            AddBarrier();
-
-            con.Initialize(enemy, player);
-
-
-
-
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -188,16 +205,21 @@ namespace _2DGame
 
             if(GameState == STATE.InGame)
             {
+
+
                 if (player.Active)
                 {
                     player.Update(gameTime, barriers);
                 }
 
                 if (enemy.Active)
-                    enemy.Update(gameTime, barriers);
+                    enemy.Update(gameTime, level.getWalls());
+
+                level.Update(gameTime);
 
                 //Uncomment for adding barriers
-                //UpdateBarrier(gameTime); 
+                UpdateBarrier(gameTime); 
+
 
                 _camera.lookAt(player.Position);
 
@@ -224,7 +246,7 @@ namespace _2DGame
 
             Animation barrierAnimation = new Animation();
 
-            barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
+            barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 16, 16, 1, 30, Color.White, 1f, true);
 
             Vector2 position = bPo;
 
@@ -234,8 +256,8 @@ namespace _2DGame
             barrier.Initialize(barrierAnimation, position);
 
             barriers.Add(barrier);
-           // Console.WriteLine("Barriers: {0}", barriers.Count);
-            bPo.Y += 32;
+            Console.WriteLine("Barriers: {0}", barriers.Count);
+            bPo.Y += 16;
         }
 
         private void UpdateBarrier(GameTime gameTime)
@@ -265,7 +287,8 @@ namespace _2DGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            GraphicsDevice.Clear(bgColor);
 
             var viewMatrix = _camera.GetViewMatrix();
 
@@ -275,6 +298,8 @@ namespace _2DGame
             if(GameState == STATE.InGame)
             {
                 spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
+                level.Draw(spriteBatch);
+
 
                 if(player.Active)
                     player.Draw(spriteBatch);
@@ -289,10 +314,14 @@ namespace _2DGame
 
             else if(GameState == STATE.InitialMenu)
             {
+                spriteBatch.Draw(backgroundMenu, new Vector2(0, 0), Color.White);
+
                 initMenu.Draw(spriteBatch);
             }
             else if (GameState == STATE.CharacterSelectionMenu)
             {
+                spriteBatch.Draw(backgroundMenu, new Vector2(0, 0), Color.White);
+
                 charMenu.Draw(spriteBatch);
             }
 

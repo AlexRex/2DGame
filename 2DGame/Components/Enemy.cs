@@ -24,12 +24,12 @@ namespace _2DGame.Components
             isLogged = false;
         }
 
-        public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Player player)
+        public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Player player, int playerChar)
         {
 
             character = new Character();
 
-            character.Initialize(charactersTexture, 0, graphicsDevice);
+            character.Initialize(charactersTexture, playerChar, graphicsDevice);
             Position = new Vector2(graphicsDevice.Viewport.TitleSafeArea.X + character.Width / 2,
                 graphicsDevice.Viewport.TitleSafeArea.Y + character.Height / 2
                 + graphicsDevice.Viewport.TitleSafeArea.Height / 2);
@@ -47,7 +47,7 @@ namespace _2DGame.Components
 
             oldState = Keyboard.GetState();
 
-            base.Initialize(charactersTexture, graphicsDevice, con, player);
+            base.Initialize(charactersTexture, graphicsDevice, con, player, playerChar);
 
         }
 
@@ -55,7 +55,7 @@ namespace _2DGame.Components
         {
  
 
-           handleInput(gameTime);
+          // handleInput(gameTime);
 
 
             if (player.Active)
@@ -235,7 +235,7 @@ namespace _2DGame.Components
                     {
                         if (wy > -hx)
                         {
-                            Console.WriteLine("collision at top");
+                            Console.WriteLine("enecollision at top");
                             this.Position.Y = barriers[i].Position.Y + barriers[i].Height;
                         }
                         else

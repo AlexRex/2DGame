@@ -19,17 +19,18 @@ namespace _2DGame.Components
 
         KeyboardState oldState;
 
+
         public Player()
         {
             isLogged = false;
         }
 
-        public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Enemy enemy)
+        public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Enemy enemy, int playerChar)
         {
 
             character = new Character();
 
-            character.Initialize(charactersTexture, 1, graphicsDevice);
+            character.Initialize(charactersTexture, playerChar, graphicsDevice);
             Position = new Vector2(graphicsDevice.Viewport.TitleSafeArea.X + character.Width / 2,
                 graphicsDevice.Viewport.TitleSafeArea.Y + character.Height / 2
                 + graphicsDevice.Viewport.TitleSafeArea.Height / 2);
@@ -47,7 +48,7 @@ namespace _2DGame.Components
 
             oldState = Keyboard.GetState();
 
-            base.Initialize(charactersTexture, graphicsDevice, con, enemy);
+            base.Initialize(charactersTexture, graphicsDevice, con, enemy, playerChar);
 
         }
 
@@ -71,7 +72,6 @@ namespace _2DGame.Components
 
             base.Update(gameTime, barriers);
         }
-
 
         private void handleInput(GameTime gameTime)
         {
@@ -103,7 +103,7 @@ namespace _2DGame.Components
 
             }
 
-            if (kbState.IsKeyDown(Keys.M) && oldState.IsKeyUp(Keys.M))
+            if (kbState.IsKeyDown(Keys.Space) && oldState.IsKeyUp(Keys.Space))
             {
                 if (character.Ammunition > 0)
                 {
@@ -219,8 +219,8 @@ namespace _2DGame.Components
 
 
                 //looking for the edge touched and correct the position 
-                float w = 0.5f * (playerBounds.Width + barrierBounds.Width);
-                float h = 0.5f * (playerBounds.Height + barrierBounds.Height);
+                float w = 1f * (playerBounds.Width + barrierBounds.Width);
+                float h = 1f * (playerBounds.Height + barrierBounds.Height);
 
                 float dx = playerBounds.Center.X - barrierBounds.Center.X;
                 float dy = playerBounds.Center.Y - barrierBounds.Center.Y;
@@ -235,7 +235,7 @@ namespace _2DGame.Components
                     {
                         if (wy > -hx)
                         {
-                            Console.WriteLine("collision at top");
+                            Console.WriteLine("plcollision at top");
                             this.Position.Y = barriers[i].Position.Y + barriers[i].Height;
                         }
                         else

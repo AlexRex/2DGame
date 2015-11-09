@@ -19,7 +19,9 @@ namespace _2DGame.Menus
 
         SpriteFont spFont;
 
-        KeyboardState oldState;
+        public KeyboardState oldState;
+        bool firstTime;
+
 
         public void Initialize(Vector2 screenDimension, SpriteFont font, Game1 game)
         {
@@ -31,6 +33,7 @@ namespace _2DGame.Menus
             active = 0;
 
             oldState = Keyboard.GetState();
+            firstTime = true;
         }
 
         public void Update(GameTime gameTime)
@@ -41,6 +44,9 @@ namespace _2DGame.Menus
 
         private void handleInput(GameTime gameTime)
         {
+            if (firstTime)
+                oldState = Keyboard.GetState();
+
             var kbState = Keyboard.GetState();
 
 
@@ -56,7 +62,11 @@ namespace _2DGame.Menus
 
             else if (kbState.IsKeyDown(Keys.Enter) && oldState.IsKeyUp(Keys.Enter))
             {
+                game.playerChar = active;
+                game.bgColor = game.blackColor;
+                game.initializeUsers();
                 game.GameState = Game1.STATE.InGame;
+                
             }
 
             if (active > 1)
@@ -69,20 +79,23 @@ namespace _2DGame.Menus
             }
 
             oldState = kbState;
-
+            if (firstTime)
+                firstTime = false;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            int posX = 150;
+            int posY = 380;
             if (active == 0)
             {
-                spriteBatch.DrawString(spFont, "Char 1", screenDimension / 2, Color.Black);
-                spriteBatch.DrawString(spFont, "Char 2", new Vector2(screenDimension.X / 2, screenDimension.Y / 2 + 60), Color.White);
+                spriteBatch.DrawString(spFont, "Char1", new Vector2(posX, posY), Color.Black);
+                spriteBatch.DrawString(spFont, "Char2", new Vector2(posX, posY + 60), Color.White);
             }
             else if (active == 1)
             {
-                spriteBatch.DrawString(spFont, "Char 1", screenDimension / 2, Color.White);
-                spriteBatch.DrawString(spFont, "Char 2", new Vector2(screenDimension.X / 2, screenDimension.Y / 2 + 60), Color.Black);
+                spriteBatch.DrawString(spFont, "Char1", new Vector2(posX, posY), Color.White);
+                spriteBatch.DrawString(spFont, "Char2", new Vector2(posX, posY + 60), Color.Black);
             }
 
 

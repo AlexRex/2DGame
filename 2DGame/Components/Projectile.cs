@@ -29,7 +29,7 @@ namespace _2DGame.Components
 
         public void Initialize(Vector2 initialPosition, int shootDirection, Texture2D texture, float Damage)
         {
-            speed = 20f;
+            speed = 25f;
 
             direction = shootDirection;
 

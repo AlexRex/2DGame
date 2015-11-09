@@ -39,14 +39,14 @@ namespace _2DGame.Components
 
 
         // Initialize for Player
-        public virtual void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Enemy enemy)
+        public virtual void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Enemy enemy, int playerChar)
         {
             this.graphicsDevice = graphicsDevice;
             this.con = con;
         }
 
         // Initialize for Enemy
-        public virtual void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Player player)
+        public virtual void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Player player, int playerChar)
         {
             this.graphicsDevice = graphicsDevice;
             this.con = con;
@@ -120,7 +120,7 @@ namespace _2DGame.Components
                     {
                         if (wy > -hx)
                         {
-                            Console.WriteLine("collision at top");
+                            Console.WriteLine("asdfcollision at top");
                             this.Position.Y = barriers[i].Position.Y + barriers[i].Height;
                         }
                         else
