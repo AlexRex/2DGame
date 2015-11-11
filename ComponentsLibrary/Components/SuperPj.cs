@@ -177,8 +177,10 @@ namespace Components
                  */
                 if (superPjBounds.Intersects(barrierBounds))
                   {
-                    Console.WriteLine(collectables[i].SpeedGiven);
-                    Console.WriteLine(collectables[i].StrengthGiven);
+                    this.character.Speed += collectables[i].SpeedGiven;
+                    this.character.Strength += collectables[i].StrengthGiven;
+                    this.character.Ammunition += collectables[i].AmmunitionGiven;
+                    this.character.Health += collectables[i].HealthGiven;
 
 
                     collectables[i].Active = false;

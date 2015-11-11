@@ -144,12 +144,12 @@ namespace _2DGame
             initMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
             charMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
 
+
+
             level.Initialize(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, barrierTexture);
 
 
-
-
-            con.Initialize(enemy, player);
+            con.Initialize(enemy, player, barrierTexture, level);
 
 
 

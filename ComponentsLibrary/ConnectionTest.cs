@@ -1,6 +1,8 @@
 ﻿using Components;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +21,20 @@ namespace Components
         Player player;
         HubConnection connection;
 
-        public void Initialize(Enemy enemy, Player player)
+        Texture2D barrierTexture;
+        Level level;
+
+        public void Initialize(Enemy enemy, Player player, Texture2D barrierTexture, Level level)
         {
             this.enemy = enemy;
             this.player = player;
+            this.barrierTexture = barrierTexture;
+            this.level = level;
+
+
             connection = new HubConnection("http://localhost:9685");
             //connection = new HubConnection("http://2dgameserver.azurewebsites.net/");
-            proxy = connection.CreateHubProxy("MoveEnemyTestHub");
+            proxy = connection.CreateHubProxy("GameHub");
             ServicePointManager.DefaultConnectionLimit = 10;
 
             //connection.Received += Connection_Received;
@@ -39,8 +48,8 @@ namespace Components
             Action<int> enemyShoot = received_enemy_shoot;
             proxy.On("sendShoot", enemyShoot);
 
-            Action connected = connectedd;
-            proxy.On("sendConnected", connected);
+            Action<List<Vector2>, List<int>> getCollectables = received_collectables;
+            proxy.On("sendCollectables", getCollectables);
             
 
             Console.WriteLine("SERVER: Waiting for connection");
@@ -60,17 +69,33 @@ namespace Components
             }
         }
 
-        private void connectedd()
+        #region Initialize
+
+        private void received_collectables(List<Vector2> collectablesPosition, List<int> type)
         {
-            Console.WriteLine("holo");
+            Console.WriteLine("got collectables");
+            List<Collectable> collectables = new List<Collectable>();
+            for(int i=0; i<collectablesPosition.Count; i++)
+            {
+                Animation barrierAnimation = new Animation();
+                barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
+
+                Collectable coll = new Collectable();
+
+                coll.Initialize(new Vector2(collectablesPosition[i].X, collectablesPosition[i].Y), type[i]);
+
+                coll.setAnimation(barrierAnimation);
+
+                collectables.Add(coll);
+            }
+
+            level.setCollectables(collectables);
         }
 
-        private void Connection_Received(string obj)
-        {
-            Console.WriteLine("Message Received {0}", obj);
-        }
 
+        #endregion
 
+        #region UpdateEnemy
         //Update Enemy
         private void received_enemy_position(float x, float y)
         {
@@ -90,6 +115,9 @@ namespace Components
             enemy.Shoot(dir);
         }
 
+        #endregion
+
+        #region UpdatePlayer
 
         // Update player
         public void Update()
@@ -112,5 +140,7 @@ namespace Components
             if (connection.State == ConnectionState.Connected)
                 proxy.Invoke("UpdatePlayerActive");
         }
+
+        #endregion
     }
 }

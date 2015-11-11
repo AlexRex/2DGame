@@ -34,7 +34,7 @@ namespace Components
             previousPosition = Position;
             Active = true;
             shootDirection = 0;
-            Health = 100f;
+            Health = character.Health;
 
             //Init projectile
             projectileTexture = charactersTexture.ElementAt(0);

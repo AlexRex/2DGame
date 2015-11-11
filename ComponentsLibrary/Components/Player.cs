@@ -35,7 +35,7 @@ namespace Components
             previousPosition = Position;
             Active = true;
             shootDirection = 0;
-            Health = 100f;
+            Health = character.Health;
 
             //Init projectile
             projectileTexture = charactersTexture.ElementAt(0);
@@ -125,10 +125,10 @@ namespace Components
             oldState = kbState;
 
 
-          /*  this.Position.X = MathHelper.Clamp(this.Position.X, character.Width / 2,
-                graphicsDevice.Viewport.Width - (character.Width / 2));
+          this.Position.X = MathHelper.Clamp(this.Position.X, character.Width / 2,
+                graphicsDevice.Viewport.Width - 32 - (character.Width / 2));
             this.Position.Y = MathHelper.Clamp(this.Position.Y, character.Height / 2,
-                graphicsDevice.Viewport.Height - (character.Height / 2));*/
+                graphicsDevice.Viewport.Height - 32 - (character.Height / 2));
 
         }
 

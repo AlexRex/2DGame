@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Components
 {
+    [Serializable]
     public class Collectable
     {
         public Animation CollectableAnimation;
@@ -42,18 +43,15 @@ namespace Components
             r = new Random();
         }
 
-        public void Initialize(Animation animation, Vector2 position)
+        public void Initialize(Vector2 position, int type)
         {
-            CollectableAnimation = animation;
+            
 
             Position = position;
             Health = 100f;
 
             Active = true;
 
-
-
-            type = r.Next(0,6);
 
             ScoreGiven = 10;
             HealthGiven = 0;
@@ -83,6 +81,11 @@ namespace Components
                     break;
             }
 
+        }
+
+        public void setAnimation(Animation animation)
+        {
+            CollectableAnimation = animation;
         }
 
         public void Update(GameTime gameTime)

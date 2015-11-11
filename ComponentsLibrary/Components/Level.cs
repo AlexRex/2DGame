@@ -22,8 +22,13 @@ namespace Components
             this.width = width;
             this.height = height;
 
+            collectables = new List<Collectable>();
+            walls = new List<Barrier>();
+
+
+
             createWalls(barrierTexture);
-            createCollectables(barrierTexture);
+            //createCollectables(barrierTexture);
 
             
         }
@@ -31,7 +36,6 @@ namespace Components
         private void createCollectables(Texture2D barrierTexture)
         {
             //Add collectables to the map
-            collectables = new List<Collectable>();
 
             Random r = new Random();
             float posX;
@@ -44,11 +48,11 @@ namespace Components
                 Animation barrierAnimation = new Animation();
                 barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
 
-                Collectable coll = new Collectable();
+                //Collectable coll = new Collectable();
 
-                coll.Initialize(barrierAnimation, new Vector2(posX, posY));
+                //coll.Initialize(new Vector2(posX, posY));
 
-                collectables.Add(coll);
+                //collectables.Add(coll);
             }
 
         }
@@ -57,7 +61,6 @@ namespace Components
         {
 
 
-            walls = new List<Barrier>();
 
             int widthNeed = width / 32;
             int heightNeed = height / 32;
@@ -173,6 +176,11 @@ namespace Components
         public List<Collectable> getCollectables()
         {
             return collectables;
+        }
+
+        public void setCollectables(List<Collectable> collectables)
+        {
+            this.collectables = collectables;
         }
 
         public void Draw(SpriteBatch spriteBatch)
