@@ -13,8 +13,9 @@ namespace AzureGameServer
 
         public override Task OnConnected()
         {
+            //Need: Random collectable positions, random collectable types.
 
-            Clients.All.sendConnected();
+            
 
             return base.OnConnected();
         }

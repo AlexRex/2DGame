@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace _2DGame.Components
+namespace Components
 {
-    class Animation
+    public class Animation
     {
         Texture2D spriteStrip;
         float scale;

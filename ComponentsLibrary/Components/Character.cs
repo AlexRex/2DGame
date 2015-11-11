@@ -5,9 +5,9 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace _2DGame.Components
+namespace Components
 {
-    class Character 
+    public class Character 
     {
         public int Strength { get; set; }
 

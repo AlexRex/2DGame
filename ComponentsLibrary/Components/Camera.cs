@@ -9,9 +9,9 @@ using System.Text;
 //Dylan Wilson: http://www.dylanwilson.net/implementing-a-2d-camera-in-monogame
 //Implemented by me: lookAt method. 
 
-namespace _2DGame.Components
+namespace Components
 {
-    class Camera
+    public class Camera
     {
         private readonly Viewport _viewport;
 

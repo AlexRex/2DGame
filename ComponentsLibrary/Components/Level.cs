@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _2DGame.Components
+namespace Components
 {
-    class Level
+    public class Level
     {
         int width;
         int height;

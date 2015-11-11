@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
-namespace _2DGame.Components
+namespace Components
 {
-    class Projectile
+    public class Projectile
     {
 
         float speed;

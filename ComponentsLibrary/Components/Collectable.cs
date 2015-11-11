@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace _2DGame.Components
+namespace Components
 {
-    class Collectable
+    public class Collectable
     {
         public Animation CollectableAnimation;
 

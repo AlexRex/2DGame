@@ -1,4 +1,4 @@
-﻿using _2DGame.Components;
+﻿using Components;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using System;
@@ -7,9 +7,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace _2DGame
+namespace Components
 {
-    class ConnectionTest
+    public class ConnectionTest
     {
 
         // IN the hub make the variables static for cross-hub stateless

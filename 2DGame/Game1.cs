@@ -1,4 +1,4 @@
-﻿using _2DGame.Components;
+﻿using Components;
 using _2DGame.Menus;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

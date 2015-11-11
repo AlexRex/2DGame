@@ -42,20 +42,9 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Components\Animation.cs" />
-    <Compile Include="Components\Barrier.cs" />
-    <Compile Include="Components\Camera.cs" />
-    <Compile Include="Components\Character.cs" />
-    <Compile Include="Components\Collectable.cs" />
-    <Compile Include="Components\Enemy.cs" />
-    <Compile Include="Components\Level.cs" />
     <Compile Include="Menus\CharacterSelection.cs" />
     <Compile Include="Menus\InitialMenu.cs" />
-    <Compile Include="Components\Projectile.cs" />
-    <Compile Include="Components\SuperPj.cs" />
-    <Compile Include="ConnectionTest.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Components\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -86,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ComponentsLibrary\ComponentsLibrary.csproj">
-      <Project>{b98a48dd-477c-49b8-9b4e-7f28b9706193}</Project>
+      <Project>{6d2a9b76-1950-4050-8ae2-a955b4a3ab8c}</Project>
       <Name>ComponentsLibrary</Name>
     </ProjectReference>
   </ItemGroup>
