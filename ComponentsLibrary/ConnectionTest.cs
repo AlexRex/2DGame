@@ -50,6 +50,9 @@ namespace Components
 
             Action<List<Vector2>, List<int>> getCollectables = received_collectables;
             proxy.On("sendCollectables", getCollectables);
+
+            Action<float, int, int, float, int> enemyVariables = received_enemy_variables;
+            proxy.On("sendVariables", enemyVariables);
             
 
             Console.WriteLine("SERVER: Waiting for connection");
@@ -68,6 +71,8 @@ namespace Components
                 Console.WriteLine("--SERVER: CONNECTED--");
             }
         }
+
+        
 
         #region Initialize
 
@@ -93,6 +98,9 @@ namespace Components
         }
 
 
+
+
+
         #endregion
 
         #region UpdateEnemy
@@ -113,6 +121,15 @@ namespace Components
         {
             //Console.WriteLine("received shoot: {0}", dir);
             enemy.Shoot(dir);
+        }
+
+        private void received_enemy_variables(float speed, int strength, int ammunition, float health, int score)
+        {
+            enemy.character.Speed = speed;
+            enemy.character.Strength = strength;
+            enemy.character.Ammunition = ammunition;
+            enemy.character.Health = health;
+            enemy.score = score;
         }
 
         #endregion
@@ -139,6 +156,12 @@ namespace Components
             Console.WriteLine("active");
             if (connection.State == ConnectionState.Connected)
                 proxy.Invoke("UpdatePlayerActive");
+        }
+
+        internal void UpdateCharVariables(float speed, int strength, int ammunition, float health, int score)
+        {
+            if (connection.State == ConnectionState.Connected)
+                proxy.Invoke("UpdateCharVariables", speed, strength, ammunition, health, score);
         }
 
         #endregion

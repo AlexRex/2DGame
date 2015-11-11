@@ -42,13 +42,13 @@ namespace Components
                 case 0:
                     Strength = 30;
                     Ammunition = 100;
-                    Speed = 10.0f;
+                    Speed = 8;
                     animation.Initialize(charactersTexture.ElementAt(type), Vector2.Zero, 32, 32, 1, 100, Color.White, 1f, true);
                     break;
                 case 1:
                     Strength = 15;
                     Ammunition = 10;
-                    Speed = 20.0f;
+                    Speed = 12;
                     animation.Initialize(charactersTexture.ElementAt(type), Vector2.Zero, 32, 32, 1, 100, Color.White, 1f, true);
                     break;
 

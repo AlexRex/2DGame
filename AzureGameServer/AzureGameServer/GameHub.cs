@@ -68,6 +68,11 @@ namespace AzureGameServer
             Clients.Others.sendShoot(direction);
         }
 
+        public void UpdateCharVariables(float speed, int strength, int ammunition, float health, int score)
+        {
+            Clients.Others.sendVariables(speed, strength, ammunition, health, score);
+        }
+
         #endregion
     }
 }

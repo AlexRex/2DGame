@@ -26,6 +26,8 @@ namespace Components
         protected Texture2D projectileTexture;
         protected List<Projectile> projectiles;
 
+        public int score { get; set; }
+
 
         public Character character;
 
@@ -43,6 +45,7 @@ namespace Components
         {
             this.graphicsDevice = graphicsDevice;
             this.con = con;
+            this.score = 0;
         }
 
         // Initialize for Enemy
@@ -177,24 +180,41 @@ namespace Components
                  */
                 if (superPjBounds.Intersects(barrierBounds))
                   {
+                    collectables[i].Active = false;
+
+
                     this.character.Speed += collectables[i].SpeedGiven;
                     this.character.Strength += collectables[i].StrengthGiven;
                     this.character.Ammunition += collectables[i].AmmunitionGiven;
                     this.character.Health += collectables[i].HealthGiven;
+                    this.score += collectables[i].ScoreGiven;
+
+                    if(this.character.Speed <= 2)
+                    {
+                        this.character.Speed = 2;
+                    }
+                    else if (this.character.Speed >= 22)
+                    {
+                        this.character.Speed = 22;
+                    }
+                    if (this.character.Strength <= 5)
+                    {
+                        this.character.Strength = 5;
+                    }
 
 
-                    collectables[i].Active = false;
-                      
+                    
                   }
             }
         }
+
 
         public virtual void Shoot(int direction)
         {
             if (character.Ammunition > 0)
             {
                 Projectile proj = new Projectile();
-                proj.Initialize(Position, direction, projectileTexture, character.Strength);
+                proj.Initialize(Position, direction, projectileTexture, character.Strength, con);
                 projectiles.Add(proj);
                 character.Ammunition--;
             }

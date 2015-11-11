@@ -18,13 +18,13 @@ namespace Components
         KeyboardState oldState;
 
 
+
         public Player()
         {
         }
 
         public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Enemy enemy, int playerChar)
         {
-
             character = new Character();
 
             character.Initialize(charactersTexture, playerChar, graphicsDevice);
@@ -112,7 +112,7 @@ namespace Components
                 if (character.Ammunition > 0)
                 {
                     Projectile proj = new Projectile();
-                    proj.Initialize(Position, shootDirection, projectileTexture, character.Strength);
+                    proj.Initialize(Position, shootDirection, projectileTexture, character.Strength, con);
                     projectiles.Add(proj);
                     character.Ammunition--;
                 }

@@ -25,12 +25,14 @@ namespace Components
         TimeSpan spawnDuration;
         Stopwatch lifeTime;
 
+        ConnectionTest con;
+
         public Projectile(){}
 
-        public void Initialize(Vector2 initialPosition, int shootDirection, Texture2D texture, float Damage)
+        public void Initialize(Vector2 initialPosition, int shootDirection, Texture2D texture, float Damage, ConnectionTest con)
         {
             speed = 25f;
-
+            this.con = con;
             direction = shootDirection;
 
            // Console.WriteLine("new projectile");

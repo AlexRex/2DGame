@@ -62,7 +62,7 @@ namespace Components
             switch (type)
             {
                 case 0:
-                    ScoreGiven = 20;
+                    ScoreGiven = 10;
                     break;
                 case 1:
                     HealthGiven = 50;

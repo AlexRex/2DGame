@@ -119,3 +119,9 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/WallTile.png
 
+#begin SpriteFont/AnimaticSmall.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:SpriteFont/AnimaticSmall.spritefont
+

@@ -45,7 +45,8 @@ namespace _2DGame
         Texture2D background;
         Texture2D backgroundMenu;
 
-        SpriteFont messageFont;
+        SpriteFont menuFont;
+        SpriteFont screenFont;
 
         TimeSpan barrierSpawnTime;
         TimeSpan previousBarrierSpawnTime;
@@ -132,7 +133,9 @@ namespace _2DGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            messageFont = Content.Load<SpriteFont>("SpriteFont/Animatic");
+            menuFont = Content.Load<SpriteFont>("SpriteFont/Animatic");
+            screenFont = Content.Load<SpriteFont>("SpriteFont/AnimaticSmall");
+
 
             barrierTexture = Content.Load<Texture2D>("Sprites/WallTile");
 
@@ -141,8 +144,8 @@ namespace _2DGame
             backgroundMenu = Content.Load<Texture2D>("Backgrounds/backgroundMenu");
             //Console.WriteLine(background);
 
-            initMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
-            charMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), messageFont, this);
+            initMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), menuFont, this);
+            charMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), menuFont, this);
 
 
 
@@ -310,6 +313,21 @@ namespace _2DGame
                 {
                     barriers[i].Draw(spriteBatch);
                 }
+
+
+                //Draw all variables
+
+                spriteBatch.DrawString(screenFont, "Player Health: " + player.character.Health, new Vector2(1300, 70), Color.White);
+                spriteBatch.DrawString(screenFont, "Player Score: " + player.score, new Vector2(1300, 100), Color.White);
+                spriteBatch.DrawString(screenFont, "Player Speed: " + player.character.Speed, new Vector2(1300, 130), Color.White);
+                spriteBatch.DrawString(screenFont, "Player Strength: "+player.character.Strength, new Vector2(1300, 160), Color.White);
+                spriteBatch.DrawString(screenFont, "Player Ammunition: " + player.character.Ammunition, new Vector2(1300, 190), Color.White);
+
+                spriteBatch.DrawString(screenFont, "Enemy Health: " + enemy.character.Health, new Vector2(1300, 250), Color.Red);
+                spriteBatch.DrawString(screenFont, "Enemy Score: " + enemy.score, new Vector2(1300, 280), Color.Red);
+                spriteBatch.DrawString(screenFont, "Enemy Speed: " + enemy.character.Speed, new Vector2(1300, 310), Color.Red);
+                spriteBatch.DrawString(screenFont, "Enemy Strength: " + enemy.character.Strength, new Vector2(1300, 340), Color.Red);
+                spriteBatch.DrawString(screenFont, "Enemy Ammunition: " + enemy.character.Ammunition, new Vector2(1300, 370), Color.Red);
             }
 
             else if(GameState == STATE.InitialMenu)
