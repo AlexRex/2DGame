@@ -89,13 +89,13 @@ namespace _2DGame.Menus
             int posY = 380;
             if (active == 0)
             {
-                spriteBatch.DrawString(spFont, "Char1", new Vector2(posX, posY), Color.Black);
+                spriteBatch.DrawString(spFont, "> Char1", new Vector2(posX, posY), Color.Black);
                 spriteBatch.DrawString(spFont, "Char2", new Vector2(posX, posY + 60), Color.White);
             }
             else if (active == 1)
             {
                 spriteBatch.DrawString(spFont, "Char1", new Vector2(posX, posY), Color.White);
-                spriteBatch.DrawString(spFont, "Char2", new Vector2(posX, posY + 60), Color.Black);
+                spriteBatch.DrawString(spFont, "> Char2", new Vector2(posX, posY + 60), Color.Black);
             }
 
 

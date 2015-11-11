@@ -12,6 +12,8 @@ namespace _2DGame
     class ConnectionTest
     {
 
+        // IN the hub make the variables static for cross-hub stateless
+
         static IHubProxy proxy;
         Enemy enemy;
         Player player;
@@ -34,6 +36,9 @@ namespace _2DGame
             Action EnemyActiveReceived = received_enemy_active;
             proxy.On("sendActive", EnemyActiveReceived);
 
+            Action<int> enemyShoot = received_enemy_shoot;
+            proxy.On("sendShoot", enemyShoot);
+
 
             Console.WriteLine("SERVER: Waiting for connection");
             try
@@ -52,6 +57,7 @@ namespace _2DGame
             }
         }
 
+        
 
         private void Connection_Received(string obj)
         {
@@ -72,6 +78,12 @@ namespace _2DGame
             enemy.Active = !enemy.Active;
         }
 
+        private void received_enemy_shoot(int dir)
+        {
+            Console.WriteLine("received shoot: {0}", dir);
+            enemy.Shoot(dir);
+        }
+
 
         // Update player
         public void Update()
@@ -80,8 +92,17 @@ namespace _2DGame
                 proxy.Invoke("UpdatePlayerPosition", player.Position.X, player.Position.Y);
         }
 
+        public void Shoot(int direction)
+        {
+            Console.WriteLine("sended shoot");
+
+            if (connection.State == ConnectionState.Connected)
+                proxy.Invoke("Shoot", direction);
+        }
+
         public void UpdateActive()
         {
+            Console.WriteLine("active");
             if (connection.State == ConnectionState.Connected)
                 proxy.Invoke("UpdatePlayerActive");
         }

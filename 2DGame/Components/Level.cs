@@ -22,34 +22,94 @@ namespace _2DGame.Components
             this.height = height;
             walls = new List<Barrier>();
 
-            int widthNeed = width / 16;
-            int heightNeed = height / 16;
+            int widthNeed = width / 32;
+            int heightNeed = height / 32;
 
-           
 
-            /*for (int i=1; i<=widthNeed; i++)
+
+            for (int i = 0; i < widthNeed; i++)
             {
+
                 Animation barrierAnimation = new Animation();
-                barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 16, 16, 1, 30, Color.White, 1f, true);
+                barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
 
                 Barrier barr = new Barrier();
-                barr.Initialize(barrierAnimation, new Vector2(i * 24, 8));
+                if (i != 0)
+                    barr.Initialize(barrierAnimation, new Vector2(walls[i - 1].Position.X + 32, 16), false);
+                else
+                    barr.Initialize(barrierAnimation, new Vector2(16, 16), false);
+
                 walls.Add(barr);
+
             }
 
-            for (int i=0; i<heightNeed; i++)
+            for (int i = 0; i < widthNeed; i++)
             {
+
                 Animation barrierAnimation = new Animation();
-                barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 16, 16, 1, 30, Color.White, 1f, true);
+                barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
 
                 Barrier barr = new Barrier();
-                if(i!=0)
-                    barr.Initialize(barrierAnimation, new Vector2(8, walls[i-1].Position.Y+16));
+                if (i != 0)
+                    barr.Initialize(barrierAnimation, new Vector2(walls[i - 1].Position.X + 32, heightNeed* 32), false);
                 else
-                    barr.Initialize(barrierAnimation, new Vector2(8, 8));
+                    barr.Initialize(barrierAnimation, new Vector2(16, heightNeed* 32), false);
 
                 walls.Add(barr);
-            }*/
+
+            }
+
+            for(int i = 0; i < heightNeed-1; i++)
+            {
+                Animation barrierAnimation = new Animation();
+                barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
+
+                int counter = walls.Count;
+
+                Barrier barr = new Barrier();
+                if (i != 0 && i != heightNeed)
+                {
+                    barr.Initialize(barrierAnimation, new Vector2(16, walls[counter-1].Position.Y + 32), false);
+                    //Console.WriteLine(barr.Position);
+                }
+                else if (i == 0)
+                {
+                    barr.Initialize(barrierAnimation, new Vector2(16, 48), false);
+                   // Console.WriteLine(barr.Position);
+                   // Console.WriteLine(walls.Count);
+                }
+
+                counter++;
+
+                walls.Add(barr);
+
+            }
+
+            for (int i = 0; i < heightNeed - 1; i++)
+            {
+                Animation barrierAnimation = new Animation();
+                barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 32, 32, 1, 30, Color.White, 1f, true);
+
+                int counter = walls.Count;
+
+                Barrier barr = new Barrier();
+                if (i != 0 && i != heightNeed)
+                {
+                    barr.Initialize(barrierAnimation, new Vector2(widthNeed * 32 - 16, walls[counter - 1].Position.Y + 32), false);
+                    Console.WriteLine(barr.Position);
+                }
+                else if (i == 0)
+                {
+                    barr.Initialize(barrierAnimation, new Vector2(widthNeed * 32 - 16, 48), false);
+                    Console.WriteLine(barr.Position);
+                    Console.WriteLine(walls.Count);
+                }
+
+                counter++;
+
+                walls.Add(barr);
+
+            }
 
         }
 

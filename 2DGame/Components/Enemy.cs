@@ -11,9 +11,7 @@ namespace _2DGame.Components
     [Serializable]
     class Enemy : SuperPj
     {
-        private String id;
-        private String password;
-        private bool isLogged;
+
 
         Player player;
 
@@ -21,7 +19,6 @@ namespace _2DGame.Components
 
         public Enemy()
         {
-            isLogged = false;
         }
 
         public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Player player, int playerChar)

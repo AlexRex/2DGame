@@ -59,6 +59,7 @@ namespace _2DGame.Components
             if (Health <= 0)
             {
                 Active = false;
+                //con.UpdateActive();
             }
 
 
@@ -70,9 +71,9 @@ namespace _2DGame.Components
             character.Update(gameTime);
 
 
-            
 
-           // con.Update();
+
+            // con.Update();
         }
 
 
@@ -120,12 +121,12 @@ namespace _2DGame.Components
                     {
                         if (wy > -hx)
                         {
-                            Console.WriteLine("asdfcollision at top");
+                            //Console.WriteLine("collision at top");
                             this.Position.Y = barriers[i].Position.Y + barriers[i].Height;
                         }
                         else
                         {
-                            Console.WriteLine("collision at right");
+                            //Console.WriteLine("collision at right");
                             this.Position.X = barriers[i].Position.X - barriers[i].Width;
 
                         }
@@ -134,25 +135,32 @@ namespace _2DGame.Components
                     {
                         if (wy > -hx)
                         {
-                            Console.WriteLine("collision on left");
+                            //Console.WriteLine("collision on left");
                             this.Position.X = barriers[i].Position.X + barriers[i].Width;
 
 
                         }
                         else
                         {
-                            Console.WriteLine("collision on bottom");
+                            //Console.WriteLine("collision on bottom");
                             this.Position.Y = barriers[i].Position.Y - barriers[i].Height;
 
                         }
                     }
 
                 }
-
-
             }
+        }
 
-
+        public virtual void Shoot(int direction)
+        {
+            if (character.Ammunition > 0)
+            {
+                Projectile proj = new Projectile();
+                proj.Initialize(Position, direction, projectileTexture, character.Strength);
+                projectiles.Add(proj);
+                character.Ammunition--;
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

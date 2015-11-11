@@ -15,6 +15,8 @@ namespace _2DGame.Components
 
         public bool Active;
 
+        public bool Destructible;
+
         public float Health { get; set; }
 
         public int Width
@@ -28,7 +30,7 @@ namespace _2DGame.Components
         }
 
         
-        public void Initialize(Animation animation, Vector2 position)
+        public void Initialize(Animation animation, Vector2 position, bool destructible)
         {
             BarrierAnimation = animation;
 
@@ -37,12 +39,14 @@ namespace _2DGame.Components
 
             Active = true;
 
+            Destructible = destructible;
+
 
         }
 
         public void Update(GameTime gameTime)
         {
-            if (Health <= 0)
+            if (Health <= 0 && Destructible)
             {
                 this.Active = false;
             }

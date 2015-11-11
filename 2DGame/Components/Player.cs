@@ -11,9 +11,7 @@ namespace _2DGame.Components
     [Serializable]
     class Player : SuperPj
     {
-        private String id;
-        private String password;
-        private bool isLogged;
+
 
         Enemy enemy;
 
@@ -22,7 +20,6 @@ namespace _2DGame.Components
 
         public Player()
         {
-            isLogged = false;
         }
 
         public override void Initialize(List<Texture2D> charactersTexture, GraphicsDevice graphicsDevice, ConnectionTest con, Enemy enemy, int playerChar)
@@ -81,18 +78,23 @@ namespace _2DGame.Components
             {
                 this.Position.X -= character.Speed;
                 shootDirection = 1;
+                con.Update();
             }
 
             if (kbState.IsKeyDown(Keys.Right))
             {
                 this.Position.X += character.Speed;
                 shootDirection = 0;
+                con.Update();
+
             }
 
             if (kbState.IsKeyDown(Keys.Up))
             {
                 this.Position.Y -= character.Speed;
                 shootDirection = 2;
+                con.Update();
+
 
             }
 
@@ -100,6 +102,8 @@ namespace _2DGame.Components
             {
                 this.Position.Y += character.Speed;
                 shootDirection = 3;
+                con.Update();
+
 
             }
 
@@ -112,6 +116,8 @@ namespace _2DGame.Components
                     projectiles.Add(proj);
                     character.Ammunition--;
                 }
+
+                con.Shoot(shootDirection);
                 
             }
 

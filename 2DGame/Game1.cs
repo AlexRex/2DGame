@@ -209,7 +209,7 @@ namespace _2DGame
 
                 if (player.Active)
                 {
-                    player.Update(gameTime, barriers);
+                    player.Update(gameTime, level.getWalls());
                 }
 
                 if (enemy.Active)
@@ -218,12 +218,12 @@ namespace _2DGame
                 level.Update(gameTime);
 
                 //Uncomment for adding barriers
-                UpdateBarrier(gameTime); 
+                //UpdateBarrier(gameTime); 
 
 
                 _camera.lookAt(player.Position);
 
-                con.Update();
+               // con.Update();
 
                 
             }
@@ -253,11 +253,11 @@ namespace _2DGame
 
             Barrier barrier = new Barrier();
 
-            barrier.Initialize(barrierAnimation, position);
+            barrier.Initialize(barrierAnimation, position, true);
 
             barriers.Add(barrier);
             Console.WriteLine("Barriers: {0}", barriers.Count);
-            bPo.Y += 16;
+            bPo.X += 16;
         }
 
         private void UpdateBarrier(GameTime gameTime)
