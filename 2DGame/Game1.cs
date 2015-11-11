@@ -209,11 +209,11 @@ namespace _2DGame
 
                 if (player.Active)
                 {
-                    player.Update(gameTime, level.getWalls());
+                    player.Update(gameTime, level.getWalls(), level.getCollectables());
                 }
 
                 if (enemy.Active)
-                    enemy.Update(gameTime, level.getWalls());
+                    enemy.Update(gameTime, level.getWalls(), level.getCollectables());
 
                 level.Update(gameTime);
 

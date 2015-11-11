@@ -46,6 +46,7 @@
     <Compile Include="Components\Barrier.cs" />
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\Character.cs" />
+    <Compile Include="Components\Collectable.cs" />
     <Compile Include="Components\Enemy.cs" />
     <Compile Include="Components\Level.cs" />
     <Compile Include="Menus\CharacterSelection.cs" />
@@ -82,6 +83,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComponentsLibrary\ComponentsLibrary.csproj">
+      <Project>{b98a48dd-477c-49b8-9b4e-7f28b9706193}</Project>
+      <Name>ComponentsLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

@@ -39,6 +39,9 @@ namespace _2DGame
             Action<int> enemyShoot = received_enemy_shoot;
             proxy.On("sendShoot", enemyShoot);
 
+            Action connected = connectedd;
+            proxy.On("sendConnected", connected);
+            
 
             Console.WriteLine("SERVER: Waiting for connection");
             try
@@ -57,7 +60,10 @@ namespace _2DGame
             }
         }
 
-        
+        private void connectedd()
+        {
+            Console.WriteLine("holo");
+        }
 
         private void Connection_Received(string obj)
         {
@@ -80,7 +86,7 @@ namespace _2DGame
 
         private void received_enemy_shoot(int dir)
         {
-            Console.WriteLine("received shoot: {0}", dir);
+            //Console.WriteLine("received shoot: {0}", dir);
             enemy.Shoot(dir);
         }
 
@@ -94,7 +100,7 @@ namespace _2DGame
 
         public void Shoot(int direction)
         {
-            Console.WriteLine("sended shoot");
+            //Console.WriteLine("sended shoot");
 
             if (connection.State == ConnectionState.Connected)
                 proxy.Invoke("Shoot", direction);
