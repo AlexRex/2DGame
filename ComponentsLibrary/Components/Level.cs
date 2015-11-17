@@ -14,6 +14,7 @@ namespace Components
         int height;
         List<Barrier> walls;
         List<Collectable> collectables;
+        List<Barrier> barriers;
 
         public Level() {}
 
@@ -24,7 +25,7 @@ namespace Components
 
             collectables = new List<Collectable>();
             walls = new List<Barrier>();
-
+            barriers = new List<Barrier>();
 
 
             createWalls(barrierTexture);
@@ -74,9 +75,9 @@ namespace Components
 
                 Barrier barr = new Barrier();
                 if (i != 0)
-                    barr.Initialize(barrierAnimation, new Vector2(walls[i - 1].Position.X + 32, 16), false);
+                    barr.Initialize(barrierAnimation, new Vector2(walls[i - 1].Position.X + 32, 16), false, true);
                 else
-                    barr.Initialize(barrierAnimation, new Vector2(16, 16), false);
+                    barr.Initialize(barrierAnimation, new Vector2(16, 16), false, true);
 
                 walls.Add(barr);
 
@@ -90,9 +91,9 @@ namespace Components
 
                 Barrier barr = new Barrier();
                 if (i != 0)
-                    barr.Initialize(barrierAnimation, new Vector2(walls[i - 1].Position.X + 32, heightNeed * 32), false);
+                    barr.Initialize(barrierAnimation, new Vector2(walls[i - 1].Position.X + 32, heightNeed * 32), false, true);
                 else
-                    barr.Initialize(barrierAnimation, new Vector2(16, heightNeed * 32), false);
+                    barr.Initialize(barrierAnimation, new Vector2(16, heightNeed * 32), false, true);
 
                 walls.Add(barr);
 
@@ -108,12 +109,12 @@ namespace Components
                 Barrier barr = new Barrier();
                 if (i != 0 && i != heightNeed)
                 {
-                    barr.Initialize(barrierAnimation, new Vector2(16, walls[counter - 1].Position.Y + 32), false);
+                    barr.Initialize(barrierAnimation, new Vector2(16, walls[counter - 1].Position.Y + 32), false, true);
                     //Console.WriteLine(barr.Position);
                 }
                 else if (i == 0)
                 {
-                    barr.Initialize(barrierAnimation, new Vector2(16, 48), false);
+                    barr.Initialize(barrierAnimation, new Vector2(16, 48), false, true);
                     // Console.WriteLine(barr.Position);
                     // Console.WriteLine(walls.Count);
                 }
@@ -134,11 +135,11 @@ namespace Components
                 Barrier barr = new Barrier();
                 if (i != 0 && i != heightNeed)
                 {
-                    barr.Initialize(barrierAnimation, new Vector2(widthNeed * 32 - 16, walls[counter - 1].Position.Y + 32), false);
+                    barr.Initialize(barrierAnimation, new Vector2(widthNeed * 32 - 16, walls[counter - 1].Position.Y + 32), false, true);
                 }
                 else if (i == 0)
                 {
-                    barr.Initialize(barrierAnimation, new Vector2(widthNeed * 32 - 16, 48), false);
+                    barr.Initialize(barrierAnimation, new Vector2(widthNeed * 32 - 16, 48), false, true);
                 }
 
                 counter++;
@@ -166,13 +167,27 @@ namespace Components
                 else
                     collectables.RemoveAt(i);
             }
+
+            for (int i = 0; i < barriers.Count; i++)
+            {
+                if (barriers[i].Active)
+                    barriers[i].Update(gameTime);
+                else
+                    barriers.RemoveAt(i);
+            }
+
         }
 
         public List<Barrier> getWalls()
         {
             return walls;
         }
-        
+
+        public List<Barrier> getBarriers()
+        {
+            return barriers;
+        }
+
         public List<Collectable> getCollectables()
         {
             return collectables;
@@ -181,6 +196,11 @@ namespace Components
         public void setCollectables(List<Collectable> collectables)
         {
             this.collectables = collectables;
+        }
+
+        public void setBarriers(List<Barrier> barriers)
+        {
+            this.barriers = barriers;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -195,6 +215,12 @@ namespace Components
             {
                 if (collectables[i].Active)
                     collectables[i].Draw(spriteBatch);
+            }
+
+            for (int i = 0; i < barriers.Count; i++)
+            {
+                if (barriers[i].Active)
+                    barriers[i].Draw(spriteBatch);
             }
         }
 

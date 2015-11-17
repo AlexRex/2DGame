@@ -45,6 +45,7 @@
     <Compile Include="Menus\CharacterSelection.cs" />
     <Compile Include="Menus\InitialMenu.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Menus\WaitingPlayersMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

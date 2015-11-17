@@ -93,66 +93,69 @@ namespace Components
 
             for (int i = 0; i < barriers.Count; i++)
             {
-
-                barrierBounds = new Rectangle((int)barriers[i].Position.X,
+                if (barriers[i].Collisionable)
+                {
+                    barrierBounds = new Rectangle((int)barriers[i].Position.X,
                     (int)barriers[i].Position.Y,
                     barriers[i].Width,
                     barriers[i].Height);
 
-                /* 
-                  Intersection, doesn't look at which edge
-                  if (playerBounds.Intersects(barrierBounds))
-                  {
-                      Console.WriteLine("Touching");
-                      this.Position = previousPosition; //If is touching go back to the previous position 
-                  }*/
+                    /* 
+                      Intersection, doesn't look at which edge
+                      if (playerBounds.Intersects(barrierBounds))
+                      {
+                          Console.WriteLine("Touching");
+                          this.Position = previousPosition; //If is touching go back to the previous position 
+                      }*/
 
 
-                //looking for the edge touched and correct the position 
-                float w = 0.5f * (superPj.Width + barrierBounds.Width);
-                float h = 0.5f * (superPj.Height + barrierBounds.Height);
+                    //looking for the edge touched and correct the position 
+                    float w = 0.5f * (superPj.Width + barrierBounds.Width);
+                    float h = 0.5f * (superPj.Height + barrierBounds.Height);
 
-                float dx = superPj.Center.X - barrierBounds.Center.X;
-                float dy = superPj.Center.Y - barrierBounds.Center.Y;
+                    float dx = superPj.Center.X - barrierBounds.Center.X;
+                    float dy = superPj.Center.Y - barrierBounds.Center.Y;
 
 
-                if (Math.Abs(dx) <= w && Math.Abs(dy) <= h)
-                {
-                    float wy = w * dy;
-                    float hx = h * dx;
-
-                    if (wy > hx)
+                    if (Math.Abs(dx) <= w && Math.Abs(dy) <= h)
                     {
-                        if (wy > -hx)
+                        float wy = w * dy;
+                        float hx = h * dx;
+
+                        if (wy > hx)
                         {
-                            //Console.WriteLine("collision at top");
-                            this.Position.Y = barriers[i].Position.Y + barriers[i].Height;
+                            if (wy > -hx)
+                            {
+                                //Console.WriteLine("collision at top");
+                                this.Position.Y = barriers[i].Position.Y + barriers[i].Height;
+                            }
+                            else
+                            {
+                                //Console.WriteLine("collision at right");
+                                this.Position.X = barriers[i].Position.X - barriers[i].Width;
+
+                            }
                         }
                         else
                         {
-                            //Console.WriteLine("collision at right");
-                            this.Position.X = barriers[i].Position.X - barriers[i].Width;
+                            if (wy > -hx)
+                            {
+                                //Console.WriteLine("collision on left");
+                                this.Position.X = barriers[i].Position.X + barriers[i].Width;
 
+
+                            }
+                            else
+                            {
+                                //Console.WriteLine("collision on bottom");
+                                this.Position.Y = barriers[i].Position.Y - barriers[i].Height;
+
+                            }
                         }
                     }
-                    else
-                    {
-                        if (wy > -hx)
-                        {
-                            //Console.WriteLine("collision on left");
-                            this.Position.X = barriers[i].Position.X + barriers[i].Width;
-
-
-                        }
-                        else
-                        {
-                            //Console.WriteLine("collision on bottom");
-                            this.Position.Y = barriers[i].Position.Y - barriers[i].Height;
-
-                        }
-                    }
-
                 }
+
+
             }
         }
 
@@ -179,7 +182,7 @@ namespace Components
                   Intersection, doesn't look at which edge
                  */
                 if (superPjBounds.Intersects(barrierBounds))
-                  {
+                {
                     collectables[i].Active = false;
 
 
@@ -189,13 +192,13 @@ namespace Components
                     this.character.Health += collectables[i].HealthGiven;
                     this.score += collectables[i].ScoreGiven;
 
-                    if(this.character.Speed <= 2)
+                    if (this.character.Speed <= 2)
                     {
                         this.character.Speed = 2;
                     }
-                    else if (this.character.Speed >= 22)
+                    else if (this.character.Speed >= 15)
                     {
-                        this.character.Speed = 22;
+                        this.character.Speed = 15;
                     }
                     if (this.character.Strength <= 5)
                     {
@@ -203,8 +206,8 @@ namespace Components
                     }
 
 
-                    
-                  }
+
+                }
             }
         }
 

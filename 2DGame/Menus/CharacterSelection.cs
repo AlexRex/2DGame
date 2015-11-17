@@ -62,10 +62,11 @@ namespace _2DGame.Menus
 
             else if (kbState.IsKeyDown(Keys.Enter) && oldState.IsKeyUp(Keys.Enter))
             {
+                game.con.selectCharacter(active);
                 game.playerChar = active;
                 game.bgColor = game.blackColor;
-                game.initializeUsers();
-                game.GameState = Game1.STATE.InGame;
+                //game.initializeUsers();
+                //game.GameState = Game1.STATE.InGame;
                 
             }
 

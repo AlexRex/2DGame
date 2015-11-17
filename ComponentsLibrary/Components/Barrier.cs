@@ -17,6 +17,8 @@ namespace Components
 
         public bool Destructible;
 
+        public bool Collisionable;
+
         public float Health { get; set; }
 
         public int Width
@@ -30,7 +32,7 @@ namespace Components
         }
 
         
-        public void Initialize(Animation animation, Vector2 position, bool destructible)
+        public void Initialize(Animation animation, Vector2 position, bool destructible, bool collisionable)
         {
             BarrierAnimation = animation;
 
@@ -40,6 +42,7 @@ namespace Components
             Active = true;
 
             Destructible = destructible;
+            Collisionable = collisionable;
 
 
         }

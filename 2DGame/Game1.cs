@@ -22,7 +22,8 @@ namespace _2DGame
             LoginMenu,
             InitialMenu,
             CharacterSelectionMenu,
-            InGame
+            InGame,
+            endGame
         }
 
         public STATE GameState;
@@ -31,16 +32,20 @@ namespace _2DGame
 
         Player player;
         Enemy enemy;
-        ConnectionTest con; 
+        public ConnectionTest con; 
 
         //Menus
         InitialMenu initMenu;
         CharacterSelection charMenu;
+        WaitingPlayersMenu waitingMenu;
         public int playerChar;
 
         //Barrier
-        Texture2D barrierTexture;
+        Texture2D wallTexture;
         List<Barrier> barriers;
+
+        Texture2D collectableTexture;
+        Texture2D barrierTexture;
 
         Texture2D background;
         Texture2D backgroundMenu;
@@ -103,6 +108,7 @@ namespace _2DGame
             //Create the menu
             initMenu = new InitialMenu();
             charMenu = new CharacterSelection();
+            waitingMenu = new WaitingPlayersMenu();
 
 
 
@@ -137,7 +143,11 @@ namespace _2DGame
             screenFont = Content.Load<SpriteFont>("SpriteFont/AnimaticSmall");
 
 
-            barrierTexture = Content.Load<Texture2D>("Sprites/WallTile");
+            wallTexture = Content.Load<Texture2D>("Sprites/WallTile");
+            collectableTexture = Content.Load<Texture2D>("Sprites/Collectable");
+            barrierTexture = Content.Load<Texture2D>("Sprites/Barrier");
+            
+
 
             //Background
             background = Content.Load<Texture2D>("Backgrounds/background0");
@@ -146,13 +156,13 @@ namespace _2DGame
 
             initMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), menuFont, this);
             charMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), menuFont, this);
+            waitingMenu.Initialize(new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), menuFont, this);
 
 
+            level.Initialize(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, wallTexture);
 
-            level.Initialize(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, barrierTexture);
 
-
-            con.Initialize(enemy, player, barrierTexture, level);
+            con.Initialize(enemy, player, barrierTexture, collectableTexture, level);
 
 
 
@@ -177,7 +187,7 @@ namespace _2DGame
 
 
             player.Initialize(charactersTexture, GraphicsDevice, con, enemy, playerChar);
-            enemy.Initialize(charactersTexture, GraphicsDevice, con, player, playerChar);
+            enemy.Initialize(charactersTexture, GraphicsDevice, con, player, con.enemyChar);
 
 
         }
@@ -206,17 +216,34 @@ namespace _2DGame
 
             // TODO: Add your update logic here
 
+            
+
             if(GameState == STATE.InGame)
             {
+                if (level.getCollectables().Count <= 0)
+                {
+                    GameState = STATE.endGame;
+                }
+                List<Barrier> unit = new List<Barrier>();
+
+                for(int i=0; i<level.getWalls().Count; i++)
+                {
+                    unit.Add(level.getWalls()[i]);
+                }
+
+                for (int i = 0; i < level.getBarriers().Count; i++)
+                {
+                    unit.Add(level.getBarriers()[i]);
+                }
 
 
                 if (player.Active)
                 {
-                    player.Update(gameTime, level.getWalls(), level.getCollectables());
+                    player.Update(gameTime, unit, level.getCollectables());
                 }
 
                 if (enemy.Active)
-                    enemy.Update(gameTime, level.getWalls(), level.getCollectables());
+                    enemy.Update(gameTime, unit, level.getCollectables());
 
                 level.Update(gameTime);
 
@@ -234,9 +261,15 @@ namespace _2DGame
             {
                 initMenu.Update(gameTime);
             }
-            else if(GameState == STATE.CharacterSelectionMenu)
+            else if(GameState == STATE.CharacterSelectionMenu && con.GameState != ConnectionTest.STATE.AllCharactersSelected)
             {
                 charMenu.Update(gameTime);
+            }
+            else if(con.GameState == ConnectionTest.STATE.AllCharactersSelected)
+            {
+                initializeUsers();
+                GameState = STATE.InGame;
+
             }
 
 
@@ -249,14 +282,14 @@ namespace _2DGame
 
             Animation barrierAnimation = new Animation();
 
-            barrierAnimation.Initialize(barrierTexture, Vector2.Zero, 16, 16, 1, 30, Color.White, 1f, true);
+            barrierAnimation.Initialize(wallTexture, Vector2.Zero, 16, 16, 1, 30, Color.White, 1f, true);
 
             Vector2 position = bPo;
 
 
             Barrier barrier = new Barrier();
 
-            barrier.Initialize(barrierAnimation, position, true);
+            barrier.Initialize(barrierAnimation, position, true, true);
 
             barriers.Add(barrier);
             Console.WriteLine("Barriers: {0}", barriers.Count);
@@ -301,7 +334,6 @@ namespace _2DGame
             if(GameState == STATE.InGame)
             {
                 spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
-                level.Draw(spriteBatch);
 
 
                 if(player.Active)
@@ -314,6 +346,7 @@ namespace _2DGame
                     barriers[i].Draw(spriteBatch);
                 }
 
+                level.Draw(spriteBatch);
 
                 //Draw all variables
 
@@ -336,13 +369,30 @@ namespace _2DGame
 
                 initMenu.Draw(spriteBatch);
             }
-            else if (GameState == STATE.CharacterSelectionMenu)
+            else if (GameState == STATE.CharacterSelectionMenu && con.GameState != ConnectionTest.STATE.WaitingPlayers)
             {
                 spriteBatch.Draw(backgroundMenu, new Vector2(0, 0), Color.White);
 
                 charMenu.Draw(spriteBatch);
             }
+            else if(con.GameState == ConnectionTest.STATE.WaitingPlayers)
+            {
+                spriteBatch.Draw(backgroundMenu, new Vector2(0, 0), Color.White);
 
+                waitingMenu.Draw(spriteBatch);
+            }
+
+            if (GameState == STATE.endGame)
+            {
+                if (player.score > enemy.score)
+                {
+                    spriteBatch.DrawString(menuFont, "YOU WIN", player.Position, Color.White);
+                }
+                if (player.score < enemy.score)
+                {
+                    spriteBatch.DrawString(menuFont, "YOU LOST", player.Position, Color.White);
+                }
+            }
 
             spriteBatch.End();
 
